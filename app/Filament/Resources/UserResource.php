@@ -19,6 +19,8 @@ class UserResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
+    protected static ?string $modelLabel = 'Usuários';
+
     public static function form(Form $form): Form
     {
         return $form
@@ -51,6 +53,10 @@ class UserResource extends Resource
                             -> required(fn(string $context):bool=>$context=='create')
                             -> password() 
                             -> validationAttribute('Confirmação de Senha'),
+                        
+                        Forms\Components\Select::make('roles')
+                            -> label('Cargo')
+                            -> relationship('roles','name'),
 
                         Forms\Components\Toggle::make('active')
                             -> label('Ativo'),
@@ -75,6 +81,11 @@ class UserResource extends Resource
                     -> searchable() 
                     -> sortable(),
 
+                Tables\Columns\TextColumn::make('roles.name') 
+                    -> label('Cargo')
+                    -> searchable() 
+                    -> sortable(),
+
                 Tables\Columns\IconColumn::make('active')
                     -> label('Ativo')
                     ->boolean(),
@@ -92,6 +103,7 @@ class UserResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
