@@ -17,7 +17,7 @@ class PermissionResource extends Resource
 {
     protected static ?string $model = Permission::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
 
     protected static ?string $modelLabel = 'Permissões';
 
@@ -27,8 +27,8 @@ class PermissionResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('name')
                     -> label('Nome')
-                    ->required()
-                    ->maxLength(255),
+                    -> required()
+                    -> maxLength(255),
 
                 Forms\Components\Select::make('roles')
                     -> label('Cargo')
@@ -44,15 +44,15 @@ class PermissionResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     -> label('Nome')
-                    ->searchable(),
+                    -> searchable(),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    -> dateTime()
+                    -> sortable()
+                    -> toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    -> dateTime()
+                    -> sortable()
+                    -> toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //

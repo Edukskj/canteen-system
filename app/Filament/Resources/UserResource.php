@@ -33,25 +33,27 @@ class UserResource extends Resource
                             -> required()
                             -> placeholder('Nome') 
                             -> validationAttribute('Nome')
-                            ->rule('min:3'),
+                            -> rule('min:3'),
 
                         Forms\Components\TextInput::make('email')
                             -> label('E-mail') 
                             -> required() 
                             -> placeholder('exemplo@hotmail.com')
-                            ->email() 
+                            -> email() 
                             -> validationAttribute('E-mail'),
 
                         Forms\Components\TextInput::make('password')
                             -> label('Senha') 
                             -> required(fn(string $context):bool=>$context=='create')
                             -> password()
+                            -> revealable()
                             -> confirmed(),
 
                         Forms\Components\TextInput::make('password_confirmation')
                             -> label('Confirmação de Senha') 
                             -> required(fn(string $context):bool=>$context=='create')
-                            -> password() 
+                            -> password()
+                            -> revealable()
                             -> validationAttribute('Confirmação de Senha'),
                         
                         Forms\Components\Select::make('roles')
