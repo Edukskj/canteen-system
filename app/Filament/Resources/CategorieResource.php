@@ -6,6 +6,8 @@ use App\Filament\Resources\CategorieResource\Pages;
 use App\Filament\Resources\CategorieResource\RelationManagers;
 use App\Models\Categorie;
 use Filament\Forms;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -17,13 +19,21 @@ class CategorieResource extends Resource
 {
     protected static ?string $model = Categorie::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-tag';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                //
+                Grid::make()
+                -> schema([
+                    TextInput::make('name')
+                        -> required()
+                        -> maxLength(255),
+
+                    Forms\Components\Toggle::make('active')
+                        ->required(),
+                ])
             ]);
     }
 
@@ -31,13 +41,17 @@ class CategorieResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('name')
+                    -> label('Nome') 
+                    -> searchable() 
+                    -> sortable(),
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make()
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

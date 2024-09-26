@@ -52,7 +52,6 @@ implements FilamentUser
 
     public function canAccessPanel($panel): bool 
     {
-    //  return $this->hasRole(['admin']);
         return $this->hasPermissionTo('access_admin');
     }
 }
