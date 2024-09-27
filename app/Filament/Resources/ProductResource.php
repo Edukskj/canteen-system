@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ProductResource\Pages;
 use App\Filament\Resources\ProductResource\RelationManagers;
+use App\Models\Categorie;
 use App\Models\Product;
 use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
@@ -29,6 +30,7 @@ class ProductResource extends Resource
                     Forms\Components\Section::make('Informações do Produto')->schema([
                         Forms\Components\TextInput::make('name')
                             -> label('Nome')
+                            -> columnSpanFull()
                             -> required()
                             -> maxLength(255),
 
@@ -65,7 +67,16 @@ class ProductResource extends Resource
                             -> searchable()
                             -> preload()
                             -> relationship('category','name')
-                    ])])->columnSpan(1)
+                    ]),
+                    
+                    Forms\Components\Section::make('Status')->schema([
+                        Forms\Components\Toggle::make('active')
+                            -> label('Status')
+                            -> required()
+                            -> default(true)
+                    ])
+                    
+                    ])->columnSpan(1)
 
             ])->columns(3);
 
@@ -75,7 +86,25 @@ class ProductResource extends Resource
     {
         return $table
             ->columns([
-                //
+                
+                Tables\Columns\TextColumn::make('name')
+                    -> labe('Nome')
+                    -> searchable(),
+                
+                Tables\Columns\TextColumn::make('category.name')
+                    -> label('Categoria')    
+                    -> searchable(),
+                
+                Tables\Columns\TextColumn::make('price')
+                    -> label('Preço')    
+                    -> money('BRL')    
+                    -> searchable(),
+
+                Tables\Columns\IconColumn::make('active')
+                    -> label('Status')    
+                    -> boolean()
+                    -> searchable()
+
             ])
             ->filters([
                 //
