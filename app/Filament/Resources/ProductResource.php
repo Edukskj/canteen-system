@@ -22,6 +22,12 @@ class ProductResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-squares-2x2';
 
+    protected static ?string $navigationGroup = 'Vendas';
+    
+    protected static ?string $modelLabel = 'Produtos';
+
+    protected static ?int $navigationSort = 2;
+    
     public static function form(Form $form): Form
     {
         return $form
@@ -71,7 +77,7 @@ class ProductResource extends Resource
                     
                     Forms\Components\Section::make('Status')->schema([
                         Forms\Components\Toggle::make('active')
-                            -> label('Status')
+                            -> label('Ativo')
                             -> required()
                             -> default(true)
                     ])
@@ -88,7 +94,7 @@ class ProductResource extends Resource
             ->columns([
                 
                 Tables\Columns\TextColumn::make('name')
-                    -> labe('Nome')
+                    -> label('Nome')
                     -> searchable(),
                 
                 Tables\Columns\TextColumn::make('category.name')
@@ -110,7 +116,11 @@ class ProductResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
