@@ -32,10 +32,10 @@ implements FilamentUser
      *
      * @var array<int, string>
      */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+     protected $hidden = [
+         'password',
+         'remember_token',
+     ];
 
     /**
      * Get the attributes that should be cast.
@@ -53,5 +53,9 @@ implements FilamentUser
     public function canAccessPanel($panel): bool 
     {
         return $this->hasPermissionTo('access_admin');
+    }
+
+    public function orders() {
+       return $this->hasMany(Order::class);
     }
 }

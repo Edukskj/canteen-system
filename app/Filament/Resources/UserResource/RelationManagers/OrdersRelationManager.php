@@ -2,11 +2,14 @@
 
 namespace App\Filament\Resources\UserResource\RelationManagers;
 
+use App\Filament\Resources\OrderResource;
+use App\Models\Order;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Tables\Actions\Action;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -29,7 +32,18 @@ class OrdersRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('id')
             ->columns([
-                Tables\Columns\TextColumn::make('id'),
+                Tables\Columns\TextColumn::make('id')
+                -> label('ID do Pedido')
+                -> searchable(),
+                
+                Tables\Columns\TextColumn::make('grand_total')
+                -> label('Valor Total')
+                -> money('BRL')
+                -> searchable(),
+                
+                Tables\Columns\TextColumn::make('created_at')
+                -> label('Data de criação')
+                
             ])
             ->filters([
                 //
@@ -38,7 +52,11 @@ class OrdersRelationManager extends RelationManager
                 Tables\Actions\CreateAction::make(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Action::make('Visualizar Pedido')
+                -> url(fn (Order $record):string => OrderResource::getUrl('view', ['record' => $record]))
+                -> color('info')
+                -> icon('heroicon-o-eye'),
+
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([

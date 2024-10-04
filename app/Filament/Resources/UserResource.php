@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
+use App\Filament\Resources\UserResource\RelationManagers\OrdersRelationManager;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -12,6 +13,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Hash;
 
 class UserResource extends Resource
 {
@@ -48,10 +50,11 @@ class UserResource extends Resource
 
                         Forms\Components\TextInput::make('password')
                             -> label('Senha') 
-                            -> required(fn(string $context):bool=>$context=='create')
                             -> password()
                             -> revealable()
-                            -> confirmed(),
+                            -> confirmed()
+                            -> dehydrated(fn (?string $state): bool => filled($state))
+                            -> required(fn (string $operation): bool => $operation === 'create'),
 
                         Forms\Components\TextInput::make('password_confirmation')
                             -> label('Confirmação de Senha') 
@@ -95,16 +98,16 @@ class UserResource extends Resource
                 Tables\Columns\IconColumn::make('active')
                     -> label('Ativo')
                     -> boolean(),
-
+            
             ])
             ->filters([
 
                 Tables\Filters\SelectFilter::make('active') 
+                    -> label('Status')
                     -> options([
                         true => 'Ativo',
                         false => 'Inativo'
                     ])
-                    -> default('true')
 
             ])
             ->actions([
@@ -124,7 +127,7 @@ class UserResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            OrdersRelationManager::class
         ];
     }
 

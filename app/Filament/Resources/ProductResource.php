@@ -107,7 +107,7 @@ class ProductResource extends Resource
                     -> searchable(),
 
                 Tables\Columns\IconColumn::make('active')
-                    -> label('Status')    
+                    -> label('Ativo')    
                     -> boolean()
                     -> searchable()
 

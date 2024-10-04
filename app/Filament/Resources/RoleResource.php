@@ -23,6 +23,8 @@ class RoleResource extends Resource
     
     protected static ?string $navigationLabel = 'Perfils';
 
+    protected static ?string $modelLabel = 'Perfils';
+
     protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
@@ -32,8 +34,8 @@ class RoleResource extends Resource
 
                 Forms\Components\TextInput::make('name')
                     -> label('Nome')
-                    ->required()
-                    ->maxLength(255),
+                    -> required()
+                    -> maxLength(255),
 
                 Forms\Components\Select::make('permissions')
                     -> label('Permissões')
@@ -50,15 +52,15 @@ class RoleResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     -> label('Nome')
-                    ->searchable(),
+                    -> searchable(),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    -> dateTime()
+                    -> sortable()
+                    -> toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    -> dateTime()
+                    -> sortable()
+                    -> toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //

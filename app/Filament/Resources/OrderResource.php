@@ -43,7 +43,7 @@ class OrderResource extends Resource
         return $form
             ->schema([
                 Group::make()->schema([
-                    Section::make('Order Information')->schema([
+                    Section::make('Informações do Pedido')->schema([
                         Select::make('user_id')
                             -> label('Usuário')
                             -> relationship('user','name')
@@ -55,7 +55,7 @@ class OrderResource extends Resource
                             -> columnSpanFull()
                     ]),
 
-                    Section::make('Order Items')->schema([
+                    Section::make('Itens do Pedido')->schema([
                         Repeater::make('items')
                             ->relationship()
                             ->schema([
