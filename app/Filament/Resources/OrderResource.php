@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\OrderResource\Pages;
 use App\Filament\Resources\OrderResource\RelationManagers;
 use App\Models\Order;
+use App\Models\User;
 use App\Models\Product;
 use Filament\Forms;
 use Filament\Forms\Set;
@@ -46,9 +47,12 @@ class OrderResource extends Resource
                     Section::make('Informações do Pedido')->schema([
                         Select::make('user_id')
                             -> label('Usuário')
-                            -> relationship('user','name')
-                            -> searchable()
                             -> preload()
+                            //-> relationship('user','name')
+                            -> searchable()
+                            -> options(User::where('active', True)->pluck('name', 'id')->toArray()) 
+                            -> getSearchResultsUsing(fn (string $search): array => User::where('active', True)->where('name','like',"%{$search}%")->limit(5)->pluck('name', 'id')->toArray())
+                            -> getOptionLabelUsing(fn ($value): ?string => User::find($value)?->name)
                             -> required(),
                         Textarea::make('notes')
                             -> label('Notas')

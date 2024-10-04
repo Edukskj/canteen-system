@@ -13,7 +13,7 @@ class OrderStats extends BaseWidget
     {
         return [
             Stat::make('Total de Pedidos', Order::query()->count()),
-            Stat::make('Preços Médios', Number::currency(Order::query()->avg('grand_total'), 'BRL'))
+            Stat::make('Preços Médios', Number::currency(Order::query()->avg('grand_total') ?? 0, 'BRL'))
         ];
     }
 }

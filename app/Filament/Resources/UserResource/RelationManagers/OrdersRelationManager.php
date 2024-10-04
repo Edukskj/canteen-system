@@ -12,6 +12,7 @@ use Filament\Tables\Table;
 use Filament\Tables\Actions\Action;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Database\Eloquent\Model;
 
 class OrdersRelationManager extends RelationManager
 {
@@ -19,12 +20,13 @@ class OrdersRelationManager extends RelationManager
 
     public function form(Form $form): Form
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('id')
-                    ->required()
-                    ->maxLength(255),
-            ]);
+        // return $form
+        //     ->schema([
+        //         Forms\Components\TextInput::make('id')
+        //             ->required()
+        //             ->maxLength(255),
+        //     ]);
+        return $form;
     }
 
     public function table(Table $table): Table
@@ -49,7 +51,7 @@ class OrdersRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                // Tables\Actions\CreateAction::make(),
             ])
             ->actions([
                 Action::make('Visualizar Pedido')
@@ -65,4 +67,11 @@ class OrdersRelationManager extends RelationManager
                 ]),
             ]);
     }
-}
+
+    public static function canViewForRecord(Model $ownerRecord, string $pageClass): bool
+    {   
+        // Verifica se o relacionamento possui registros
+        return  $ownerRecord->orders()->exists(); 
+    }
+
+};
