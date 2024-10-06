@@ -52,10 +52,15 @@ implements FilamentUser
 
     public function canAccessPanel($panel): bool 
     {
-        return $this->hasPermissionTo('access_admin');
+        //return $this->hasPermissionTo('access_admin');
+        return true;
     }
 
     public function orders() {
        return $this->hasMany(Order::class);
     }
+
+    public function payments() {
+        return $this->hasMany(Payment::class);
+     }
 }
