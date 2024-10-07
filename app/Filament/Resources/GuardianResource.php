@@ -19,6 +19,10 @@ class GuardianResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?string $navigationGroup = 'Clientes';
+
+    protected static ?string $modelLabel = 'Responsáveis';
+
     public static function form(Form $form): Form
     {
         return $form
@@ -44,7 +48,7 @@ class GuardianResource extends Resource
                             -> label('CPF')
                             -> validationAttribute('CPF'),
 
-                        Forms\Components\Select::make('phone')
+                        Forms\Components\TextInput::make('phone')
                             -> label('Celular')
                             -> validationAttribute('Celular'),
 

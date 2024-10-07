@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->integer('cpf')->unique()->nullable();
+            $table->bigInteger('cpf')->unique()->nullable();
             $table->string('phone');
             $table->boolean('active')->default(true);
             $table->timestamps();

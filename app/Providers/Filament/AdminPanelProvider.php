@@ -52,6 +52,13 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])
+            ->navigationGroups([
+                'Vendas',
+                'Pagamentos',
+                'Clientes',
+                'Admin',
+            ])
+            ->sidebarCollapsibleOnDesktop();
     }
 }

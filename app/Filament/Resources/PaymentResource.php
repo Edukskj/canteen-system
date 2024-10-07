@@ -23,7 +23,12 @@ class PaymentResource extends Resource
 {
     protected static ?string $model = Payment::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-banknotes';
+    protected static ?string $activeNavigationIcon = 'heroicon-s-banknotes';
+
+    protected static ?string $navigationGroup = 'Pagamentos';
+
+    protected static ?string $modelLabel = 'Entradas';
 
     public static function form(Form $form): Form
     {
@@ -51,15 +56,7 @@ class PaymentResource extends Resource
                         -> required()
                         -> default(1)
                         -> minvalue(1)
-                        -> columnSpan(3),
-
-                    TextInput::make('value')
-                        -> label('Valor')
-                        -> numeric()
-                        -> required()
-                        -> default(1)
-                        -> minvalue(1)
-                        -> columnSpan(3),
+                        -> columnSpanFull(),
 
                 ]),
             ]);

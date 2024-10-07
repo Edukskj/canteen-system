@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\StudentResource\Pages;
 use App\Filament\Resources\StudentResource\RelationManagers;
 use App\Models\Student;
+use App\Models\Guardian;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -19,12 +20,16 @@ class StudentResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?string $navigationGroup = 'Clientes';
+
+    protected static ?string $modelLabel = 'Alunos';
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\Section::make([
-                    Forms\Components\Grid::make() ->schema([
+                    Forms\Components\Grid::make()->schema([
 
                         Forms\Components\TextInput::make('name')
                             -> label('Nome')
@@ -33,21 +38,9 @@ class StudentResource extends Resource
                             -> validationAttribute('Nome')
                             -> rule('min:3'),
 
-                        Forms\Components\TextInput::make('email')
-                            -> label('E-mail') 
-                            -> required() 
-                            -> placeholder('exemplo@hotmail.com')
-                            -> email() 
-                            -> validationAttribute('E-mail'),
-                            
                         Forms\Components\TextInput::make('rm')
                             -> label('RM')
                             -> validationAttribute('RM'),
-
-                        Forms\Components\Select::make('guardian')
-                            -> label('Responsável')
-                            -> relationship('guardians','name')
-                            -> validationAttribute('Reponsável'),
 
                         Forms\Components\Toggle::make('active')
                             -> label('Ativo'),
@@ -63,11 +56,6 @@ class StudentResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     -> label('Nome') 
-                    -> searchable() 
-                    -> sortable(),
-
-                Tables\Columns\TextColumn::make('email') 
-                    -> label('E-mail')
                     -> searchable() 
                     -> sortable(),
 
