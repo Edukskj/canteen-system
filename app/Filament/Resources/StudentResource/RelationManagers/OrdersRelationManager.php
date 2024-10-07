@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\UserResource\RelationManagers;
+namespace App\Filament\Resources\StudentResource\RelationManagers;
 
 use App\Filament\Resources\OrderResource;
 use App\Models\Order;

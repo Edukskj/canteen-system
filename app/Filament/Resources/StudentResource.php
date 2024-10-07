@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\StudentResource\Pages;
 use App\Filament\Resources\StudentResource\RelationManagers;
+use App\Filament\Resources\StudentResource\RelationManagers\OrdersRelationManager;
 use App\Models\Student;
 use App\Models\Guardian;
 use Filament\Forms;
@@ -13,12 +14,14 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Forms\Components\Select;
 
 class StudentResource extends Resource
 {
     protected static ?string $model = Student::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-users';
+    protected static ?string $activeNavigationIcon = 'heroicon-s-users';
 
     protected static ?string $navigationGroup = 'Clientes';
 
@@ -42,6 +45,15 @@ class StudentResource extends Resource
                             -> label('RM')
                             -> validationAttribute('RM'),
 
+                        Select::make('guardian_id')
+                            -> label('Responsável')
+                            -> preload()
+                            -> searchable()
+                            -> options(Guardian::where('active', True)->pluck('name', 'id')->toArray()) 
+                            -> getSearchResultsUsing(fn (string $search): array => Guardian::where('active', True)->where('name','like',"%{$search}%")->limit(5)->pluck('name', 'id')->toArray())
+                            -> getOptionLabelUsing(fn ($value): ?string => Guardian::find($value)?->name)
+                            -> required(),
+
                         Forms\Components\Toggle::make('active')
                             -> label('Ativo'),
 
@@ -59,7 +71,7 @@ class StudentResource extends Resource
                     -> searchable() 
                     -> sortable(),
 
-                Tables\Columns\TextColumn::make('guardians.name') 
+                Tables\Columns\TextColumn::make('guardian.name') 
                     -> label('Responsável')
                     -> searchable() 
                     -> sortable(),
@@ -93,7 +105,7 @@ class StudentResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            OrdersRelationManager::class
         ];
     }
 

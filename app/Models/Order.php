@@ -10,15 +10,15 @@ class Order extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
+        'student_id',
         'grand_total',
         'payment_method',
         'payment_status',
         'notes',
     ];
 
-    public function user() {
-        return $this->belongsTo(User::class);
+    public function student() {
+        return $this->belongsTo(Student::class);
     }
 
     public function items() {

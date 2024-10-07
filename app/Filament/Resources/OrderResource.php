@@ -5,7 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\OrderResource\Pages;
 use App\Filament\Resources\OrderResource\RelationManagers;
 use App\Models\Order;
-use App\Models\User;
+use App\Models\Student;
 use App\Models\Product;
 use Filament\Forms;
 use Filament\Forms\Set;
@@ -46,14 +46,13 @@ class OrderResource extends Resource
             ->schema([
                 Group::make()->schema([
                     Section::make('Informações do Pedido')->schema([
-                        Select::make('user_id')
-                            -> label('Usuário')
+                        Select::make('student_id')
+                            -> label('Aluno')
                             -> preload()
-                            //-> relationship('user','name')
                             -> searchable()
-                            -> options(User::where('active', True)->pluck('name', 'id')->toArray()) 
-                            -> getSearchResultsUsing(fn (string $search): array => User::where('active', True)->where('name','like',"%{$search}%")->limit(5)->pluck('name', 'id')->toArray())
-                            -> getOptionLabelUsing(fn ($value): ?string => User::find($value)?->name)
+                            -> options(Student::where('active', True)->pluck('name', 'id')->toArray()) 
+                            -> getSearchResultsUsing(fn (string $search): array => Student::where('active', True)->where('name','like',"%{$search}%")->limit(5)->pluck('name', 'id')->toArray())
+                            -> getOptionLabelUsing(fn ($value): ?string => Student::find($value)?->name)
                             -> required(),
                         Textarea::make('notes')
                             -> label('Notas')
@@ -66,6 +65,7 @@ class OrderResource extends Resource
                             ->schema([
 
                                 Select::make('product_id')
+                                    -> label('Produto')
                                     -> relationship('product','name')
                                     -> searchable()
                                     -> preload()
@@ -91,6 +91,7 @@ class OrderResource extends Resource
                                     -> label('Valor Unidade')
                                     -> numeric()
                                     -> required()
+                                    -> disabled()
                                     -> default(1)
                                     -> minvalue(1)
                                     -> columnSpan(3),
@@ -130,7 +131,7 @@ class OrderResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('user.name')
+                TextColumn::make('student.name')
                     -> label('Cliente')
                     -> sortable()
                     -> searchable(),
@@ -142,14 +143,14 @@ class OrderResource extends Resource
 
                 TextColumn::make('created_at')
                     -> label('Criado em')
-                    -> dateTime()
                     -> sortable()
-                    -> toggleable(isToggledHiddenByDefault: true),
+                    -> date('d/m/Y H:i'),
 
                 TextColumn::make('updated_at')
                     -> label('Atualizado em')
                     -> dateTime()
                     -> sortable()
+                    -> since()
                     -> toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([

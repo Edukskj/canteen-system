@@ -12,6 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Columns\TextColumn;
 
 class RoleResource extends Resource
 {
@@ -51,16 +52,20 @@ class RoleResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     -> label('Nome')
                     -> searchable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    -> dateTime()
+                TextColumn::make('created_at')
+                    -> label('Criado em')
                     -> sortable()
+                    -> date('d/m/Y H:i')
                     -> toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+
+                TextColumn::make('updated_at')
+                    -> label('Atualizado em')
                     -> dateTime()
                     -> sortable()
+                    -> since()
                     -> toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([

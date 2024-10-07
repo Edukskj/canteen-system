@@ -17,7 +17,8 @@ class GuardianResource extends Resource
 {
     protected static ?string $model = Guardian::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-user';
+    protected static ?string $activeNavigationIcon = 'heroicon-s-user';
 
     protected static ?string $navigationGroup = 'Clientes';
 
