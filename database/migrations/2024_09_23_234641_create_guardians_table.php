@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->bigInteger('cpf')->unique()->nullable();
             $table->string('phone');
+            $table->decimal('wallet', 10, 2)->nullable();
             $table->boolean('active')->default(true);
             $table->timestamps();
         });

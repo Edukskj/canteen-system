@@ -1,22 +1,22 @@
 <?php
 
-namespace App\Filament\Resources\StudentResource\RelationManagers;
+namespace App\Filament\Resources\GuardianResource\RelationManagers;
 
-use App\Filament\Resources\OrderResource;
-use App\Models\Order;
 use Filament\Forms;
+use App\Models\Payment;
 use Filament\Forms\Form;
+use App\Filament\Resources\PaymentResource;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Tables\Actions\Action;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Illuminate\Database\Eloquent\Model;
+use Filament\Tables\Columns\TextColumn;
 
-class OrdersRelationManager extends RelationManager
+class PaymentsRelationManager extends RelationManager
 {
-    protected static string $relationship = 'orders';
+    protected static string $relationship = 'payments';
 
     public function form(Form $form): Form
     {
@@ -33,28 +33,30 @@ class OrdersRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('id')
             ->columns([
-                Tables\Columns\TextColumn::make('id')
-                -> label('ID do Pedido')
-                -> searchable(),
-                
-                Tables\Columns\TextColumn::make('grand_total')
-                -> label('Valor Total')
-                -> money('BRL')
-                -> searchable(),
-                
-                Tables\Columns\TextColumn::make('created_at')
-                -> label('Data de criação')
-                
+                TextColumn::make('guardian.name')
+                    -> label('Aluno')
+                    -> sortable()
+                    -> searchable(),
+
+                TextColumn::make('value')
+                    -> label('Valor')
+                    -> sortable()
+                    -> money('BRL'),
+
+                TextColumn::make('created_at')
+                    -> label('Criado em')
+                    -> sortable()
+                    -> date('d/m/Y H:i'),
             ])
             ->filters([
                 //
             ])
             ->headerActions([
-                // Tables\Actions\CreateAction::make(),
+                Tables\Actions\CreateAction::make(),
             ])
             ->actions([
                 Action::make('Visualizar Pedido')
-                -> url(fn (Order $record):string => OrderResource::getUrl('view', ['record' => $record]))
+                -> url(fn (Payment $record):string => PaymentResource::getUrl('view', ['record' => $record]))
                 -> color('info')
                 -> icon('heroicon-o-eye'),
 
@@ -66,11 +68,4 @@ class OrdersRelationManager extends RelationManager
                 ]),
             ]);
     }
-
-    public static function canViewForRecord(Model $ownerRecord, string $pageClass): bool
-    {   
-        // Verifica se o relacionamento possui registros
-        return  $ownerRecord->orders()->exists(); 
-    }
-
-};
+}

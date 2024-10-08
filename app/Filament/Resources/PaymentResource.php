@@ -5,7 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PaymentResource\Pages;
 use App\Filament\Resources\PaymentResource\RelationManagers;
 use App\Models\Payment;
-use App\Models\User;
+use App\Models\Guardian;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -36,14 +36,14 @@ class PaymentResource extends Resource
             ->schema([
                 Section::make('Informações do Pagamento')->schema([
 
-                    Select::make('user_id')
-                        -> label('Usuário')
+                    Select::make('guardian_id')
+                        -> label('Responsável')
                         -> preload()
-                        //-> relationship('user','name')
+                        //-> relationship('guardian','name')
                         -> searchable()
-                        -> options(User::where('active', True)->pluck('name', 'id')->toArray()) 
-                        -> getSearchResultsUsing(fn (string $search): array => User::where('active', True)->where('name','like',"%{$search}%")->limit(5)->pluck('name', 'id')->toArray())
-                        -> getOptionLabelUsing(fn ($value): ?string => User::find($value)?->name)
+                        -> options(guardian::where('active', True)->pluck('name', 'id')->toArray()) 
+                        -> getSearchResultsUsing(fn (string $search): array => guardian::where('active', True)->where('name','like',"%{$search}%")->limit(5)->pluck('name', 'id')->toArray())
+                        -> getOptionLabelUsing(fn ($value): ?string => guardian::find($value)?->name)
                         -> required(),
 
                     Textarea::make('notes')
@@ -67,7 +67,7 @@ class PaymentResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('user.name')
+                TextColumn::make('guardian.name')
                     -> label('Aluno')
                     -> sortable()
                     -> searchable(),
@@ -79,14 +79,14 @@ class PaymentResource extends Resource
 
                 TextColumn::make('created_at')
                     -> label('Criado em')
-                    -> dateTime()
                     -> sortable()
-                    -> toggleable(isToggledHiddenByDefault: true),
+                    -> date('d/m/Y H:i'),
 
                 TextColumn::make('updated_at')
                     -> label('Atualizado em')
                     -> dateTime()
                     -> sortable()
+                    -> since()
                     -> toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([

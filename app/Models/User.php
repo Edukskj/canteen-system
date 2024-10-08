@@ -56,7 +56,4 @@ implements FilamentUser
         return true;
     }
 
-    public function payments() {
-        return $this->hasMany(Payment::class);
-    }
 }
