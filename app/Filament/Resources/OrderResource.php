@@ -7,6 +7,7 @@ use App\Filament\Resources\OrderResource\RelationManagers;
 use App\Models\Order;
 use App\Models\Student;
 use App\Models\Product;
+use App\Models\Guardian;
 use Filament\Forms;
 use Filament\Forms\Set;
 use Filament\Forms\Form;
@@ -26,6 +27,7 @@ use Filament\Forms\Components\TextInput;
 use Illuminate\Support\Number;
 use Filament\Forms\Get;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\Actions\Action;
 
 class OrderResource extends Resource
 {
@@ -53,7 +55,39 @@ class OrderResource extends Resource
                             -> options(Student::where('active', True)->pluck('name', 'id')->toArray()) 
                             -> getSearchResultsUsing(fn (string $search): array => Student::where('active', True)->where('name','like',"%{$search}%")->limit(5)->pluck('name', 'id')->toArray())
                             -> getOptionLabelUsing(fn ($value): ?string => Student::find($value)?->name)
-                            -> required(),
+                            -> required()
+                            -> relationship('student','name')
+                            -> createOptionForm([
+                                Forms\Components\TextInput::make('name')
+                                    -> label('Nome')
+                                    -> required()
+                                    -> placeholder('Nome') 
+                                    -> validationAttribute('Nome')
+                                    -> rule('min:3'),
+
+                                Forms\Components\TextInput::make('rm')
+                                    -> label('RM')
+                                    -> validationAttribute('RM'),
+
+                                Select::make('guardian_id')
+                                    -> label('Responsável')
+                                    -> preload()
+                                    -> searchable()
+                                    -> options(Guardian::where('active', True)->pluck('name', 'id')->toArray()) 
+                                    -> getSearchResultsUsing(fn (string $search): array => Guardian::where('active', True)->where('name','like',"%{$search}%")->limit(5)->pluck('name', 'id')->toArray())
+                                    -> getOptionLabelUsing(fn ($value): ?string => Guardian::find($value)?->name)
+                                    -> required(),
+
+                                Forms\Components\Toggle::make('active')
+                                    -> label('Ativo')
+                                    -> default(true),
+                            ])
+                            ->createOptionAction(function (Action $action) {
+                                return $action
+                                    -> modalHeading('Criar Aluno')
+                                    -> modalSubmitActionLabel('Criar')
+                                    -> modalWidth('lg');
+                            }),
                         Textarea::make('notes')
                             -> label('Notas')
                             -> columnSpanFull()
@@ -62,6 +96,7 @@ class OrderResource extends Resource
                     Section::make('Itens do Pedido')->schema([
                         Repeater::make('items')
                             ->relationship()
+                            ->label("Itens")
                             ->schema([
 
                                 Select::make('product_id')
@@ -88,16 +123,17 @@ class OrderResource extends Resource
                                     -> afterStateUpdated(fn ($state, Set $set, Get $get) => $set('total_amount', $state * $get('unit_amount'))),
 
                                 TextInput::make('unit_amount')
-                                    -> label('Valor Unidade')
+                                    -> label('Valor Unitário')
+                                    -> prefix('R$')
                                     -> numeric()
                                     -> required()
                                     -> disabled()
-                                    -> default(1)
                                     -> minvalue(1)
                                     -> columnSpan(3),
 
                                 TextInput::make('total_amount')
                                     -> label('Valor Total')
+                                    -> prefix('R$')
                                     -> numeric()
                                     -> required()
                                     -> columnSpan(3)

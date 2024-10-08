@@ -39,7 +39,8 @@ class CategorieResource extends Resource
                         -> maxLength(255),
 
                     Forms\Components\Toggle::make('active')
-                        ->required(),
+                        -> required()
+                        -> default(true),
                 ])
             ]);
     }

@@ -37,8 +37,8 @@ class GuardianResource extends Resource
                             -> placeholder('Nome') 
                             -> validationAttribute('Nome')
                             -> rule('min:3'),
-
-                        Forms\Components\TextInput::make('email')
+                            
+                            Forms\Components\TextInput::make('email')
                             -> label('E-mail') 
                             -> required() 
                             -> placeholder('exemplo@hotmail.com')
@@ -54,7 +54,8 @@ class GuardianResource extends Resource
                             -> validationAttribute('Celular'),
 
                         Forms\Components\Toggle::make('active')
-                            -> label('Ativo'),
+                            -> label('Ativo')
+                            -> default(true),
 
                     ])
                 ])

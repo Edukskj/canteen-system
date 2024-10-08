@@ -9,6 +9,7 @@ use App\Models\Product;
 use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\MarkdownEditor;
+use Filament\Forms\Components\TextInput; 
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -50,7 +51,7 @@ class ProductResource extends Resource
                     Forms\Components\Section::make('Imagens')->schema([
 
                         Forms\Components\FileUpload::make('images')
-                            -> label('Imagens')
+                            -> label('')
                             -> multiple()
                             -> directory('products')
                             -> maxFiles(5)
@@ -61,7 +62,7 @@ class ProductResource extends Resource
                 Forms\Components\Group::make()->schema([
                     Forms\Components\Section::make('Preço')->schema([
                         Forms\Components\TextInput::make('price')
-                            -> label('Preço')
+                            -> label('Valor Unitário')
                             -> numeric()
                             -> required()
                             -> prefix('R$')
@@ -74,6 +75,15 @@ class ProductResource extends Resource
                             -> searchable()
                             -> preload()
                             -> relationship('category','name')
+                            -> createOptionForm([
+                                TextInput::make('name')
+                                    -> required()
+                                    -> maxLength(255),
+
+                                Forms\Components\Toggle::make('active')
+                                    -> required()
+                                    -> default(true),
+                                ])
                     ]),
                     
                     Forms\Components\Section::make('Status')->schema([

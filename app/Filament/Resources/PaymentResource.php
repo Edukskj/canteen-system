@@ -52,6 +52,7 @@ class PaymentResource extends Resource
 
                     TextInput::make('value')
                         -> label('Valor')
+                        -> prefix('R$')
                         -> numeric()
                         -> required()
                         -> default(1)

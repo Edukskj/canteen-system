@@ -55,7 +55,8 @@ class StudentResource extends Resource
                             -> required(),
 
                         Forms\Components\Toggle::make('active')
-                            -> label('Ativo'),
+                            -> label('Ativo')
+                            -> default(true),
 
                     ])
                 ])
