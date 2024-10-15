@@ -54,6 +54,21 @@ class GuardianResource extends Resource
                             -> label('Celular')
                             -> validationAttribute('Celular'),
 
+                        Forms\Components\Select::make('students')
+                            -> label('Alunos')
+                            -> multiple()
+                            -> preload()
+                            -> disabled()
+                            -> relationship('students','name')
+                            -> hidden(fn (string $operation): bool => $operation === 'create'),
+
+                            Forms\Components\TextInput::make('wallet')
+                            -> label('Saldo')
+                            -> validationAttribute('Saldo')
+                            -> prefix('R$')
+                            -> numeric()
+                            -> hidden(fn (string $operation): bool => $operation === 'create'),
+
                         Forms\Components\Toggle::make('active')
                             -> label('Ativo')
                             -> default(true),
