@@ -16,7 +16,7 @@ use Filament\Tables\Columns\TextColumn;
 
 class PaymentsRelationManager extends RelationManager
 {
-    protected static string $relationship = 'payments';
+    protected static string $relationship = 'pagamentos';
 
     public function form(Form $form): Form
     {

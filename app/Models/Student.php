@@ -22,5 +22,9 @@ class Student extends Model
 
     public function orders() {
         return $this->hasMany(Order::class);
-     }
+    }
+
+    public function adicionaSaldoRepres($valor) {
+        Guardian::find($this->guardian_id)->acrescentaSaldo($valor);
+    }
 }

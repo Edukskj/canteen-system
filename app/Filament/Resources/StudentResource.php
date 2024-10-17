@@ -47,7 +47,7 @@ class StudentResource extends Resource
 
                         Select::make('guardian_id')
                             -> label('Responsável')
-                            -> preload()
+                            -> relationship('guardian','name')
                             -> searchable()
                             -> options(Guardian::where('active', True)->pluck('name', 'id')->toArray()) 
                             -> getSearchResultsUsing(fn (string $search): array => Guardian::where('active', True)->where('name','like',"%{$search}%")->limit(5)->pluck('name', 'id')->toArray())

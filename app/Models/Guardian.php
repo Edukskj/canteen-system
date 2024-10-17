@@ -15,13 +15,19 @@ class Guardian extends Model
         'cpf',
         'phone',
         'active',
+        'wallet',
     ];
 
     public function students() {
         return $this->hasMany(Student::class);
     }
 
-    public function payments() {
+    public function pagamentos() {
         return $this->hasMany(Payment::class);
+    }
+
+    public function acrescentaSaldo($valor) {
+        $this->wallet = $this->wallet - $valor;
+        $this->save();
     }
 }

@@ -56,10 +56,10 @@ class GuardianResource extends Resource
 
                         Forms\Components\Select::make('students')
                             -> label('Alunos')
+                            -> relationship('students','name')
                             -> multiple()
                             -> preload()
                             -> disabled()
-                            -> relationship('students','name')
                             -> hidden(fn (string $operation): bool => $operation === 'create'),
 
                             Forms\Components\TextInput::make('wallet')
@@ -94,6 +94,14 @@ class GuardianResource extends Resource
 
                 Tables\Columns\TextColumn::make('phone') 
                     -> label('Celular')
+                    -> searchable() 
+                    -> sortable(),
+
+                Tables\Columns\TextColumn::make('wallet')
+                    -> badge()
+                    -> color(fn($state) => $state > 0 ? 'success' : 'danger')
+                    -> label('Saldo')
+                    -> money('BRL')
                     -> searchable() 
                     -> sortable(),
 
