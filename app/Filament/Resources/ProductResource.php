@@ -13,6 +13,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -48,14 +49,11 @@ class ProductResource extends Resource
                             -> fileAttachmentsDirectory('products'),
                     ])->columns(2),
 
-                    Forms\Components\Section::make('Imagens')->schema([
+                    Forms\Components\Section::make('Imagem')->schema([
 
                         Forms\Components\FileUpload::make('images')
                             -> label('')
-                            -> multiple()
-                            -> directory('products')
-                            -> maxFiles(5)
-                            -> reorderable(),
+                            -> directory('products'),
                     ])
                 ])->columnSpan(2),
 
@@ -104,6 +102,10 @@ class ProductResource extends Resource
         return $table
             ->columns([
                 
+                ImageColumn::make('images')
+                -> label('Foto')    
+                -> circular(),
+
                 Tables\Columns\TextColumn::make('name')
                     -> label('Nome')
                     -> searchable(),

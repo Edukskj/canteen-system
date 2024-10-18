@@ -50,13 +50,11 @@ class OrderResource extends Resource
                     Section::make('Informações do Pedido')->schema([
                         Select::make('student_id')
                             -> label('Aluno')
-                            -> preload()
                             -> searchable()
-                            -> options(Student::where('active', True)->pluck('name', 'id')->toArray()) 
-                            -> getSearchResultsUsing(fn (string $search): array => Student::where('active', True)->where('name','like',"%{$search}%")->limit(5)->pluck('name', 'id')->toArray())
-                            -> getOptionLabelUsing(fn ($value): ?string => Student::find($value)?->name)
                             -> required()
-                            -> relationship('student','name')
+                            -> relationship('student','name',function ($query) {
+                                $query->where('active',true);
+                            })
                             -> createOptionForm([
                                 Forms\Components\TextInput::make('name')
                                     -> label('Nome')
@@ -71,11 +69,10 @@ class OrderResource extends Resource
 
                                 Select::make('guardian_id')
                                     -> label('Responsável')
-                                    -> preload()
+                                    -> relationship('guardian','name', function ($query) {
+                                        $query->where('active',true);
+                                    })
                                     -> searchable()
-                                    -> options(Guardian::where('active', True)->pluck('name', 'id')->toArray()) 
-                                    -> getSearchResultsUsing(fn (string $search): array => Guardian::where('active', True)->where('name','like',"%{$search}%")->limit(5)->pluck('name', 'id')->toArray())
-                                    -> getOptionLabelUsing(fn ($value): ?string => Guardian::find($value)?->name)
                                     -> required(),
 
                                 Forms\Components\Toggle::make('active')
@@ -101,7 +98,9 @@ class OrderResource extends Resource
 
                                 Select::make('product_id')
                                     -> label('Produto')
-                                    -> relationship('product','name')
+                                    -> relationship('product','name', function ($query) {
+                                        $query->where('active',true);
+                                    })
                                     -> searchable()
                                     -> preload()
                                     -> required()

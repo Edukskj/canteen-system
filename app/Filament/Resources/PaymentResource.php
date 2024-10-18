@@ -38,12 +38,10 @@ class PaymentResource extends Resource
 
                     Select::make('guardian_id')
                         -> label('Responsável')
-                        -> preload()
-                        //-> relationship('guardian','name')
                         -> searchable()
-                        -> options(guardian::where('active', True)->pluck('name', 'id')->toArray()) 
-                        -> getSearchResultsUsing(fn (string $search): array => guardian::where('active', True)->where('name','like',"%{$search}%")->limit(5)->pluck('name', 'id')->toArray())
-                        -> getOptionLabelUsing(fn ($value): ?string => guardian::find($value)?->name)
+                        -> relationship('guardian','name', function ($query) {
+                            $query->where('active',true);
+                        })
                         -> required(),
 
                     Textarea::make('notes')

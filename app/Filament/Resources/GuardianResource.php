@@ -48,10 +48,15 @@ class GuardianResource extends Resource
                             
                         Forms\Components\TextInput::make('cpf')
                             -> label('CPF')
+                            -> mask('999.999.999-99')
+                            -> placeholder('000.000.000-00')
                             -> validationAttribute('CPF'),
 
                         Forms\Components\TextInput::make('phone')
                             -> label('Celular')
+                            -> placeholder('(00) 0000-0000')
+                            -> tel()
+                            -> telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/')
                             -> validationAttribute('Celular'),
 
                         Forms\Components\Select::make('students')

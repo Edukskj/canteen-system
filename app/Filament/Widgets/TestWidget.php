@@ -2,7 +2,7 @@
 
 namespace App\Filament\Widgets;
 
-use App\Models\Student;
+use App\Models\Order;
 use Carbon\Carbon;
 use Filament\Widgets\ChartWidget;
 use Filament\Widgets\Concerns\InteractsWithPageFilters;
@@ -13,7 +13,7 @@ class TestWidget extends ChartWidget
 {
     use InteractsWithPageFilters;
 
-    protected static ?string $heading = 'Alunos no Ano';
+    protected static ?string $heading = 'Vendas Realizadas';
 
     protected function getData(): array
     {
@@ -22,7 +22,7 @@ class TestWidget extends ChartWidget
         $end = $this->filters['endDate'];
         
         if (($start == null) && ($end == null)) {
-            $data = Trend::model(Student::class)
+            $data = Trend::model(Order::class)
             ->between(
                 start: now()->subMonth(2),
                 end: now(),
@@ -30,7 +30,7 @@ class TestWidget extends ChartWidget
             ->perMonth()
             ->count();
         } else {
-            $data = Trend::model(Student::class)
+            $data = Trend::model(Order::class)
             ->between(
                 start: $start ? Carbon::parse($start) : now(),
                 end: $end ? Carbon::parse($end) : now(),
@@ -44,7 +44,7 @@ class TestWidget extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Alunos',
+                    'label' => 'Vendas',
                     'data' => $data->map(fn (TrendValue $value) => $value->aggregate),  
                     'borderColor' => 'rgb(255, 99, 132)',
                 ],

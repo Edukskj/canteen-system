@@ -19,16 +19,13 @@ class Dashboard extends \Filament\Pages\Dashboard
         return $form->schema([
             Section::make('')->schema([
 
-                TextInput::make('name')
-                    -> label('Nome'),
-
                 DatePicker::make('startDate')
                     -> label('Data de Inicio'),
 
                 DatePicker::make('endDate')
                     -> label('Data de Fim'),
 
-            ])->columns(3)
+            ])->columns(2)
         ]);
     }
 
