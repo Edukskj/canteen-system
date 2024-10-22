@@ -47,7 +47,15 @@ class OrderResource extends Resource
         return $form
             ->schema([
                 Group::make()->schema([
-                    Section::make('Informações do Pedido')->schema([
+                    Section::make('Informações do Pedido')
+                    ->schema([
+                        Forms\Components\Grid::make(12) 
+                        ->schema([
+
+                        TextInput::make('id')
+                        ->label('ID')
+                        ->columnSpan(1),
+
                         Select::make('student_id')
                             -> label('Aluno')
                             -> searchable()
@@ -84,7 +92,13 @@ class OrderResource extends Resource
                                     -> modalHeading('Criar Aluno')
                                     -> modalSubmitActionLabel('Criar')
                                     -> modalWidth('lg');
-                            }),
+                            })->columnSpan(8),
+                        
+                        TextInput::make('guardian')
+                            ->label('Representante')
+                            ->columnSpan(3)
+                        ]),
+
                         Textarea::make('notes')
                             -> label('Notas')
                             -> columnSpanFull()

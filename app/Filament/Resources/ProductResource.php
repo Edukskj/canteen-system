@@ -12,6 +12,7 @@ use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\TextInput; 
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\Alignment;
 use Filament\Tables;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Table;
@@ -49,7 +50,7 @@ class ProductResource extends Resource
                             -> fileAttachmentsDirectory('products'),
                     ])->columns(2),
 
-                    Forms\Components\Section::make('Imagem')->schema([
+                    Forms\Components\Section::make('Foto')->schema([
 
                         Forms\Components\FileUpload::make('images')
                             -> label('')

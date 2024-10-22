@@ -7,6 +7,7 @@ use App\Filament\Resources\CategorieResource\RelationManagers;
 use App\Models\Categorie;
 use Filament\Forms;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -14,6 +15,8 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Columns\Layout\Stack;
+use Filament\Support\Enums\Alignment;
 
 class CategorieResource extends Resource
 {
@@ -32,13 +35,13 @@ class CategorieResource extends Resource
     {
         return $form
             ->schema([
-                Grid::make()
-                -> schema([
-                    TextInput::make('name')
+                Section::make('')->schema([
+                    TextInput::make('Nome')
                         -> required()
                         -> maxLength(255),
 
                     Forms\Components\Toggle::make('active')
+                        -> label('Ativo')
                         -> required()
                         -> default(true),
                 ])
@@ -53,6 +56,12 @@ class CategorieResource extends Resource
                     -> label('Nome') 
                     -> searchable() 
                     -> sortable(),
+             
+
+                Tables\Columns\IconColumn::make('active')
+                    -> label('Ativo')
+                    -> boolean()
+                ->alignment(Alignment::End)
             ])
             ->filters([
                 //

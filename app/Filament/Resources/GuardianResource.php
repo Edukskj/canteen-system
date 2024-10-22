@@ -98,13 +98,15 @@ class GuardianResource extends Resource
                     -> sortable(),
 
                 Tables\Columns\TextColumn::make('phone') 
+                    ->formatStateUsing(fn (string $state): string => 
+                    '(' . substr($state, 0, 2) . ') ' . substr($state, 2, 5) . '-' . substr($state, 7))
                     -> label('Celular')
                     -> searchable() 
                     -> sortable(),
 
                 Tables\Columns\TextColumn::make('wallet')
                     -> badge()
-                    -> color(fn($state) => $state > 0 ? 'success' : 'danger')
+                    -> color(fn ($state) => $state > 0 ? 'success' : ($state < 0 ? 'danger' : 'gray'))
                     -> label('Saldo')
                     -> money('BRL')
                     -> searchable() 

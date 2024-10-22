@@ -37,6 +37,7 @@ class UserResource extends Resource
 
                         Forms\Components\TextInput::make('name')
                             -> label('Nome')
+                            -> autofocus()
                             -> required()
                             -> placeholder('Nome') 
                             -> validationAttribute('Nome')

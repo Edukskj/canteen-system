@@ -70,9 +70,14 @@ class StudentResource extends Resource
                     -> label('Nome') 
                     -> searchable() 
                     -> sortable(),
-
+                    
                 Tables\Columns\TextColumn::make('guardian.name') 
                     -> label('Responsável')
+                    -> searchable() 
+                    -> sortable(),
+
+                Tables\Columns\TextColumn::make('rm')
+                    -> label('RM') 
                     -> searchable() 
                     -> sortable(),
 
