@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
+            $table->string('student_id')->constrained('guardians')->cascadeOnDelete();
+            $table->string('guardian_id')->constrained('students')->cascadeOnDelete();
+            $table->decimal('value', 10, 2)->nullable();
+            $table->text('notes')->nullable();
+            $table->char('type',1);
             $table->timestamps();
         });
     }

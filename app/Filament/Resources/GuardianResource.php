@@ -4,7 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\GuardianResource\Pages;
 use App\Filament\Resources\GuardianResource\RelationManagers;
-use App\Filament\Resources\GuardianResource\RelationManagers\PaymentsRelationManager;
+use App\Filament\Resources\GuardianResource\RelationManagers\TransactionRelationManager;
 use App\Models\Guardian;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -141,7 +141,7 @@ class GuardianResource extends Resource
     public static function getRelations(): array
     {
         return [
-            PaymentsRelationManager::class
+            TransactionRelationManager::class
         ];
     }
 

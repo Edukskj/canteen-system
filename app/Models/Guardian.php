@@ -22,8 +22,8 @@ class Guardian extends Model
         return $this->hasMany(Student::class);
     }
 
-    public function pagamentos() {
-        return $this->hasMany(Payment::class);
+    public function transações() {
+        return $this->hasMany(Transaction::class);
     }
 
     public function acrescentaSaldo($valor) {
