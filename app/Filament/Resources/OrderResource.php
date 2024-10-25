@@ -53,15 +53,46 @@ class OrderResource extends Resource
                         ->schema([
 
                         TextInput::make('id')
-                        ->label('ID')
-                        ->columnSpan(1),
+                            ->label('ID')
+                            ->columnSpan(1)
+                            ->reactive()
+                            ->debounce(500)
+                            ->afterStateUpdated(function ($state, callable $set, callable $get) {
+                                if ($state && $get('student_id') !== $state) {
+                                    $student = \App\Models\Student::select('id', 'name', 'guardian_id')->find($state);
+                                    if ($student) {
+                                        $set('student_id', $student->id);
+                                        // Atualiza apenas o nome do responsável
+                                        $set('guardian', optional($student->guardian)->name); 
+                                    } else {
+                                        $set('student_id', null);
+                                        $set('guardian', null);
+                                    }
+                                }
+                            })
+                            ->dehydrateStateUsing(fn ($state) => null),
 
                         Select::make('student_id')
                             -> label('Aluno')
                             -> searchable()
                             -> required()
-                            -> relationship('student','name',function ($query) {
-                                $query->where('active',true);
+                            -> relationship('student', 'name', function ($query) {
+                                $query->where('active', true)
+                                    ->select('id', 'name');
+                            })
+                            -> reactive()
+                            ->afterStateUpdated(function ($state, callable $set, callable $get) {
+                                if ($state && $get('id') !== $state) {
+                                    $student = \App\Models\Student::select('id', 'name', 'guardian_id')->find($state);
+                                    if ($student) {
+                                        $set('id', $student->id);
+                                        // Atualiza apenas o nome do responsável
+                                        $set('guardian', optional($student->guardian)->name); 
+                                    } else {
+                                        $set('id', null);
+                                        $set('guardian', null);
+                                    }
+                                }
                             })
                             -> createOptionForm([
                                 Forms\Components\TextInput::make('name')
@@ -95,8 +126,11 @@ class OrderResource extends Resource
                             })->columnSpan(8),
                         
                         TextInput::make('guardian')
-                            ->label('Representante')
+                            ->label('Responsável')
                             ->columnSpan(3)
+                            ->disabled()
+                            ->dehydrateStateUsing(fn ($state) => null)
+                            ->hidden(fn (string $operation): bool => $operation !== 'create')
                         ]),
 
                         Textarea::make('notes')

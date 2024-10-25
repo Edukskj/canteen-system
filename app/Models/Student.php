@@ -25,6 +25,14 @@ class Student extends Model
     }
 
     public function adicionaSaldoRepres($valor) {
-        Guardian::find($this->guardian_id)->acrescentaSaldo($valor);
+        $data = [
+            'guardian_id' => $this->guardian_id,
+            'student_id' => $this->id,
+            'value' => $valor,
+            'type' => 'S',
+            'notes' => 'Movimentação criada automaticamente pelo Pedido de Venda'
+        ];
+        
+        Transaction::createTransaction($data);
     }
 }

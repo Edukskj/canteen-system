@@ -158,6 +158,13 @@ class TransactionResource extends Resource
                     -> searchable(),
 
                 TextColumn::make('value')
+                    -> badge()
+                    -> color(function ($record) {
+                        if ($record->value == 0) {
+                            return 'gray';
+                        }
+                        return $record->type === 'E' ? 'success' : ($record->type === 'S' ? 'danger' : 'gray');
+                    })
                     -> label('Valor')
                     -> sortable()
                     -> money('BRL'),
@@ -180,13 +187,10 @@ class TransactionResource extends Resource
             ->actions([
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\ViewAction::make(),
-                    Tables\Actions\EditAction::make(),
-                    Tables\Actions\DeleteAction::make(),
                 ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }

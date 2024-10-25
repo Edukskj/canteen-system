@@ -24,4 +24,27 @@ class Transaction extends Model
     public function student() {
         return $this->belongsTo(Student::class);
     }
+
+    public static function createTransaction($data)
+    {
+        $transaction = self::create($data);
+        $transaction->afterCreate();
+        return $transaction;
+    }
+
+    protected function afterCreate(): void
+    {
+        /** @var Transaction $transaction */
+        $transaction = $this;
+
+        $guardian = Guardian::find($transaction->guardian_id);
+        
+        if ($guardian){
+            if ($transaction->type === 'E') {
+                $guardian->adicionaSaldo($transaction->value);
+            } else {
+                $guardian->retiraSaldo($transaction->value);
+            }
+        }
+    }
 }
