@@ -104,14 +104,16 @@ class GuardianResource extends Resource
                 Tables\Columns\TextColumn::make('email') 
                     -> label('E-mail')
                     -> searchable() 
-                    -> sortable(),
+                    -> sortable()
+                    ->visibleFrom('md'),
 
                 Tables\Columns\TextColumn::make('phone') 
                     ->formatStateUsing(fn (string $state): string => 
                     '(' . substr($state, 0, 2) . ') ' . substr($state, 2, 5) . '-' . substr($state, 7))
                     -> label('Celular')
                     -> searchable() 
-                    -> sortable(),
+                    -> sortable()
+                    ->visibleFrom('md'),
 
                 Tables\Columns\TextColumn::make('wallet')
                     -> badge()

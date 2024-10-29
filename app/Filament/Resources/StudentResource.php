@@ -43,7 +43,8 @@ class StudentResource extends Resource
 
                         Forms\Components\TextInput::make('rm')
                             -> label('RM')
-                            -> validationAttribute('RM'),
+                            -> validationAttribute('RM')
+                            -> required(),
 
                         Select::make('guardian_id')
                             -> label('Responsável')

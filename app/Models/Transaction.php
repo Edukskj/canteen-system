@@ -47,4 +47,19 @@ class Transaction extends Model
             }
         }
     }
+
+    public function reversal($reversalType) {
+        $this->type = 'R';
+        $this->save();
+
+        $guardian = Guardian::find($this->guardian_id);
+
+        if ($guardian){
+            if ($reversalType == 'E') {
+                $guardian->adicionaSaldo($this->value);
+            } else {
+                $guardian->retiraSaldo($this->value);
+            }
+        }
+    }
 }

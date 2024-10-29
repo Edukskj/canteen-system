@@ -18,6 +18,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\Actions\Action;
+use Filament\Forms\Get;
 
 class TransactionResource extends Resource
 {
@@ -121,7 +122,8 @@ class TransactionResource extends Resource
 
                 Textarea::make('notes')
                     -> label('Notas')
-                    -> columnSpanFull(),
+                    -> columnSpanFull()
+                    -> hidden(fn (Get $get, string $operation) => $get('notes') === null && $operation !== 'create'),
 
                 TextInput::make('value')
                     -> label('Valor')
@@ -138,6 +140,7 @@ class TransactionResource extends Resource
                         'E' => 'Entrada',
                         'S' => 'Saída',
                     ])
+                    -> hidden(fn (Get $get) => $get('type') === 'R')
 
             ]),
         ]);

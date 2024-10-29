@@ -51,91 +51,102 @@ class OrderResource extends Resource
                     ->schema([
                         Forms\Components\Grid::make(12) 
                         ->schema([
-
-                        TextInput::make('id')
-                            ->label('ID')
-                            ->columnSpan(1)
-                            ->reactive()
-                            ->debounce(500)
-                            ->afterStateUpdated(function ($state, callable $set, callable $get) {
-                                if ($state && $get('student_id') !== $state) {
-                                    $student = \App\Models\Student::select('id', 'name', 'guardian_id')->find($state);
-                                    if ($student) {
-                                        $set('student_id', $student->id);
-                                        // Atualiza apenas o nome do responsável
-                                        $set('guardian', optional($student->guardian)->name); 
+                            TextInput::make('rm')
+                                ->label('RM')
+                                ->columnSpan(['md' => 1])
+                                ->reactive()
+                                ->debounce(500)
+                                ->afterStateUpdated(function ($state, callable $set) {
+                                    if ($state) {
+                                        $student = Student::where('rm', $state)->first();
+                                        if ($student) {
+                                            $set('student_id', $student->id);
+                                            $set('guardian', optional($student->guardian)->name); 
+                                        } else {
+                                            $set('student_id', null);
+                                            $set('guardian', null);
+                                        }
                                     } else {
                                         $set('student_id', null);
                                         $set('guardian', null);
                                     }
-                                }
-                            })
-                            ->dehydrateStateUsing(fn ($state) => null),
+                                })
+                                ->dehydrateStateUsing(fn ($state) => null),
 
-                        Select::make('student_id')
-                            -> label('Aluno')
-                            -> searchable()
-                            -> required()
-                            -> relationship('student', 'name', function ($query) {
-                                $query->where('active', true)
-                                    ->select('id', 'name');
-                            })
-                            -> reactive()
-                            ->afterStateUpdated(function ($state, callable $set, callable $get) {
-                                if ($state && $get('id') !== $state) {
-                                    $student = \App\Models\Student::select('id', 'name', 'guardian_id')->find($state);
-                                    if ($student) {
-                                        $set('id', $student->id);
-                                        // Atualiza apenas o nome do responsável
-                                        $set('guardian', optional($student->guardian)->name); 
+                            Select::make('student_id')
+                                ->label('Aluno')
+                                ->searchable()
+                                ->required()
+                                ->relationship('student', 'name', function ($query) {
+                                    $query->where('active', true)
+                                        ->select('id', 'name');
+                                })
+                                ->reactive()
+                                ->afterStateUpdated(function ($state, callable $set) {
+                                    if ($state) {
+                                        $student = Student::find($state);
+                                        if ($student) {
+                                            $set('rm', $student->rm);
+                                            $set('guardian', optional($student->guardian)->name); 
+                                        } else {
+                                            $set('rm', null);
+                                            $set('guardian', null);
+                                        }
                                     } else {
-                                        $set('id', null);
+                                        $set('rm', null);
                                         $set('guardian', null);
                                     }
-                                }
-                            })
-                            -> createOptionForm([
-                                Forms\Components\TextInput::make('name')
-                                    -> label('Nome')
-                                    -> required()
-                                    -> placeholder('Nome') 
-                                    -> validationAttribute('Nome')
-                                    -> rule('min:3'),
+                                })
+                                ->createOptionForm([
+                                    Forms\Components\TextInput::make('name')
+                                        ->label('Nome')
+                                        ->required()
+                                        ->placeholder('Nome') 
+                                        ->validationAttribute('Nome')
+                                        ->rule('min:3')
+                                        ->reactive()
+                                        ->afterStateUpdated(function ($state, callable $set) {
+                                            if (empty($state)) {
+                                                $set('rm', null);
+                                                $set('student_id', null);
+                                                $set('guardian', null);
+                                            }
+                                        }),
 
-                                Forms\Components\TextInput::make('rm')
-                                    -> label('RM')
-                                    -> validationAttribute('RM'),
+                                    Forms\Components\TextInput::make('rm')
+                                        ->label('RM')
+                                        ->validationAttribute('RM'),
 
-                                Select::make('guardian_id')
-                                    -> label('Responsável')
-                                    -> relationship('guardian','name', function ($query) {
-                                        $query->where('active',true);
-                                    })
-                                    -> searchable()
-                                    -> required(),
+                                    Select::make('guardian_id')
+                                        ->label('Responsável')
+                                        ->relationship('guardian','name', function ($query) {
+                                            $query->where('active', true);
+                                        })
+                                        ->searchable()
+                                        ->required(),
 
-                                Forms\Components\Toggle::make('active')
-                                    -> label('Ativo')
-                                    -> default(true),
-                            ])
-                            ->createOptionAction(function (Action $action) {
-                                return $action
-                                    -> modalHeading('Criar Aluno')
-                                    -> modalSubmitActionLabel('Criar')
-                                    -> modalWidth('lg');
-                            })->columnSpan(8),
-                        
-                        TextInput::make('guardian')
-                            ->label('Responsável')
-                            ->columnSpan(3)
-                            ->disabled()
-                            ->dehydrateStateUsing(fn ($state) => null)
-                            ->hidden(fn (string $operation): bool => $operation !== 'create')
+                                    Forms\Components\Toggle::make('active')
+                                        ->label('Ativo')
+                                        ->default(true),
+                                ])
+                                ->createOptionAction(function (Action $action) {
+                                    return $action
+                                        ->modalHeading('Criar Aluno')
+                                        ->modalSubmitActionLabel('Criar')
+                                        ->modalWidth('lg');
+                                })->columnSpan(['md' => 8]),
+                            
+                            TextInput::make('guardian')
+                                ->label('Responsável')
+                                ->columnSpan(['md' => 3])
+                                ->disabled()
+                                ->dehydrateStateUsing(fn ($state) => null)
+                                ->hidden(fn (string $operation): bool => $operation !== 'create')
                         ]),
 
                         Textarea::make('notes')
-                            -> label('Notas')
-                            -> columnSpanFull()
+                            ->label('Observações')
+                            ->columnSpanFull()
                     ]),
 
                     Section::make('Itens do Pedido')->schema([
@@ -154,7 +165,7 @@ class OrderResource extends Resource
                                     -> required()
                                     -> distinct()
                                     -> disableOptionsWhenSelectedInSiblingRepeaterItems()
-                                    -> columnSpan(4)
+                                    -> columnSpan(['md' => 4])
                                     -> reactive()
                                     -> afterStateUpdated(fn ($state, Set $set) => $set('unit_amount', Product::find($state)?->price ?? 0))
                                     -> afterStateUpdated(fn ($state, Set $set) => $set('total_amount', Product::find($state)?->price ?? 0)),
@@ -165,7 +176,7 @@ class OrderResource extends Resource
                                     -> required()
                                     -> default(1)
                                     -> minValue(1)
-                                    -> columnSpan(2)
+                                    -> columnSpan(['md' => 2])
                                     -> reactive()
                                     -> afterStateUpdated(fn ($state, Set $set, Get $get) => $set('total_amount', $state * $get('unit_amount'))),
 
@@ -176,14 +187,14 @@ class OrderResource extends Resource
                                     -> required()
                                     -> disabled()
                                     -> minvalue(1)
-                                    -> columnSpan(3),
+                                    -> columnSpan(['md' => 3]),
 
                                 TextInput::make('total_amount')
                                     -> label('Valor Total')
                                     -> prefix('R$')
                                     -> numeric()
                                     -> required()
-                                    -> columnSpan(3)
+                                    -> columnSpan(['md' => 3])
 
                             ])->columns(12),
 
@@ -227,7 +238,8 @@ class OrderResource extends Resource
                 TextColumn::make('created_at')
                     -> label('Criado em')
                     -> sortable()
-                    -> date('d/m/Y H:i'),
+                    -> date('d/m/Y H:i')
+                    -> visibleFrom('md'),
 
                 TextColumn::make('updated_at')
                     -> label('Atualizado em')
