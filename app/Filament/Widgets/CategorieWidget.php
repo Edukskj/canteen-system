@@ -14,7 +14,7 @@ class CategorieWidget extends ChartWidget
 
     protected int | string | array $columnSpan = 1;
 
-    protected static ?string $maxHeight = '255px';
+    protected static ?string $maxHeight = '260px';
 
     protected function getData(): array
     {

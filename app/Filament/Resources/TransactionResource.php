@@ -18,6 +18,10 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\Actions\Action;
+use Filament\Tables\Actions\BulkAction;
+use Illuminate\Database\Eloquent\Collection;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\TransactionsExport;
 use Filament\Forms\Get;
 
 class TransactionResource extends Resource
@@ -194,6 +198,12 @@ class TransactionResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
+                    BulkAction::make('export')
+                    -> label('Export to Excel')
+                    -> icon('heroicon-o-document-arrow-down')
+                    -> action(function(Collection $records) {
+                        return Excel::download(new TransactionsExport($records), 'movimentacoes.xlsx');
+                    })
                 ]),
             ]);
     }
