@@ -10,6 +10,7 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Storage;
 
 class ListTransactions extends ListRecords
 {
@@ -27,7 +28,7 @@ class ListTransactions extends ListRecords
                 FileUpload::make('attachment')
             ])
             -> action(function(array $data){
-                $file = public_path('storage/' . $data['attachment']);
+                $file = Storage::disk('public')->path($data['attachment']);
 
                 Excel::import(new TransactionsImport, $file);
 
