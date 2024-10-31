@@ -33,7 +33,7 @@ class ListTransactions extends ListRecords
                 Excel::import(new TransactionsImport, $file);
 
                 Notification::make()
-                ->title('Usuários Importados!')
+                ->title('Movimentações Importadas!')
                 ->success()
                 ->send();
             }),

@@ -7,7 +7,6 @@ use App\Filament\Resources\OrderResource\RelationManagers;
 use App\Models\Order;
 use App\Models\Student;
 use App\Models\Product;
-use App\Models\Guardian;
 use Filament\Forms;
 use Filament\Forms\Set;
 use Filament\Forms\Form;
@@ -27,7 +26,8 @@ use Filament\Forms\Components\TextInput;
 use Illuminate\Support\Number;
 use Filament\Forms\Get;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\Actions\Action;
+use Filament\Forms\Components\Actions\Action as FormAction;
+use Filament\Actions\Action;
 
 class OrderResource extends Resource
 {
@@ -129,7 +129,7 @@ class OrderResource extends Resource
                                         ->label('Ativo')
                                         ->default(true),
                                 ])
-                                ->createOptionAction(function (Action $action) {
+                                ->createOptionAction(function (FormAction $action) {
                                     return $action
                                         ->modalHeading('Criar Aluno')
                                         ->modalSubmitActionLabel('Criar')
@@ -256,6 +256,10 @@ class OrderResource extends Resource
                     Tables\Actions\ViewAction::make(),
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\DeleteAction::make(),
+                    Action::make('Download Pdf')
+                        ->icon('heroicon-o-document-arrow-down')
+                        ->url(fn(Order $record) => route('order.pdf.download', $record))
+                        ->openUrlInNewTab()
                 ])
             ])
             ->bulkActions([
