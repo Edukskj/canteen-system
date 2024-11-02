@@ -28,6 +28,7 @@ use Filament\Forms\Get;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\Actions\Action as FormAction;
 use Filament\Actions\Action;
+use Filament\Forms\Components\ToggleButtons;
 
 class OrderResource extends Resource
 {
@@ -47,176 +48,281 @@ class OrderResource extends Resource
         return $form
             ->schema([
                 Group::make()->schema([
-                    Section::make('Informações do Pedido')
+                    Section::make('Informações do Cliente')
                     ->schema([
-                        Forms\Components\Grid::make(12) 
-                        ->schema([
-                            TextInput::make('rm')
-                                ->label('RM')
-                                ->columnSpan(['md' => 1])
-                                ->reactive()
-                                ->debounce(500)
-                                ->afterStateUpdated(function ($state, callable $set) {
-                                    if ($state) {
+                        Forms\Components\Grid::make(12)
+                            ->schema([
+                                TextInput::make('rm')
+                                    ->label('RM')
+                                    ->columnSpan(['md' => 2])
+                                    ->reactive()
+                                    ->debounce(500)
+                                    ->dehydrateStateUsing(fn ($state) => null)
+                                    ->afterStateUpdated(function ($state, callable $set) {
                                         $student = Student::where('rm', $state)->first();
                                         if ($student) {
                                             $set('student_id', $student->id);
-                                            $set('guardian', optional($student->guardian)->name); 
+                                            $set('guardian', optional($student->guardian)->name);
+                                            $set('period', $student->period);
+                                            $set('teacher', $student->teacher);
+                                            $set('grade', $student->grade);
+                                            $set('observation', $student->observation);
+                                            // Define showAdditionalFields based on infantil value from student record
+                                            $set('showAdditionalFields', $student->infantil);
                                         } else {
                                             $set('student_id', null);
                                             $set('guardian', null);
+                                            $set('period', null);
+                                            $set('teacher', null);
+                                            $set('grade', null);
+                                            $set('observation', null);
+                                            $set('showAdditionalFields', false);
                                         }
-                                    } else {
-                                        $set('student_id', null);
-                                        $set('guardian', null);
-                                    }
-                                })
-                                ->dehydrateStateUsing(fn ($state) => null),
+                                    })
+                                    ->afterStateHydrated(function ($state, callable $set) {
+                                        $student = Student::where('rm', $state)->first();
+                                        if ($student) {
+                                            $set('student_id', $student->id);
+                                            $set('guardian', optional($student->guardian)->name);
+                                            $set('period', $student->period);
+                                            $set('teacher', $student->teacher);
+                                            $set('grade', $student->grade);
+                                            $set('observation', $student->observation);
+                                            $set('showAdditionalFields', $student->infantil);
+                                        } else {
+                                            $set('student_id', null);
+                                            $set('guardian', null);
+                                            $set('period', null);
+                                            $set('teacher', null);
+                                            $set('grade', null);
+                                            $set('observation', null);
+                                            $set('showAdditionalFields', false);
+                                        }
+                                    }),
 
-                            Select::make('student_id')
-                                ->label('Aluno')
-                                ->searchable()
-                                ->required()
-                                ->relationship('student', 'name', function ($query) {
-                                    $query->where('active', true)
-                                        ->select('id', 'name');
-                                })
-                                ->reactive()
-                                ->afterStateUpdated(function ($state, callable $set) {
-                                    if ($state) {
+                                Select::make('student_id')
+                                    ->label('Aluno')
+                                    ->searchable()
+                                    ->required()
+                                    ->columnSpan(['md' => 4])
+                                    ->relationship('student', 'name', function ($query) {
+                                        $query->where('active', true)
+                                            ->select('id', 'name');
+                                    })
+                                    ->reactive()
+                                    ->afterStateUpdated(function ($state, callable $set) {
                                         $student = Student::find($state);
                                         if ($student) {
                                             $set('rm', $student->rm);
-                                            $set('guardian', optional($student->guardian)->name); 
+                                            $set('guardian', optional($student->guardian)->name);
+                                            $set('period', $student->period);
+                                            $set('teacher', $student->teacher);
+                                            $set('grade', $student->grade);
+                                            $set('observation', $student->observation);
+                                            $set('showAdditionalFields', $student->infantil);
                                         } else {
                                             $set('rm', null);
                                             $set('guardian', null);
+                                            $set('period', null);
+                                            $set('teacher', null);
+                                            $set('grade', null);
+                                            $set('observation', null);
+                                            $set('showAdditionalFields', false);
                                         }
-                                    } else {
-                                        $set('rm', null);
-                                        $set('guardian', null);
-                                    }
-                                })
-                                ->createOptionForm([
-                                    Forms\Components\TextInput::make('name')
-                                        ->label('Nome')
-                                        ->required()
-                                        ->placeholder('Nome') 
-                                        ->validationAttribute('Nome')
-                                        ->rule('min:3')
-                                        ->reactive()
-                                        ->afterStateUpdated(function ($state, callable $set) {
-                                            if (empty($state)) {
-                                                $set('rm', null);
-                                                $set('student_id', null);
-                                                $set('guardian', null);
-                                            }
-                                        }),
+                                    })
+                                    ->afterStateHydrated(function ($state, callable $set) {
+                                        $student = Student::find($state);
+                                        if ($student) {
+                                            $set('rm', $student->rm);
+                                            $set('guardian', optional($student->guardian)->name);
+                                            $set('period', $student->period);
+                                            $set('teacher', $student->teacher);
+                                            $set('grade', $student->grade);
+                                            $set('observation', $student->observation);
+                                            $set('showAdditionalFields', $student->infantil);
+                                        } else {
+                                            $set('rm', null);
+                                            $set('guardian', null);
+                                            $set('period', null);
+                                            $set('teacher', null);
+                                            $set('grade', null);
+                                            $set('observation', null);
+                                            $set('showAdditionalFields', false);
+                                        }
+                                    }),
 
-                                    Forms\Components\TextInput::make('rm')
-                                        ->label('RM')
-                                        ->validationAttribute('RM'),
+                                TextInput::make('guardian')
+                                    ->label('Responsável')
+                                    ->columnSpan(['md' => 3])
+                                    ->disabled()
+                                    ->dehydrateStateUsing(fn ($state) => null),
 
-                                    Select::make('guardian_id')
-                                        ->label('Responsável')
-                                        ->relationship('guardian','name', function ($query) {
-                                            $query->where('active', true);
-                                        })
-                                        ->searchable()
-                                        ->required(),
+                                Select::make('period')
+                                    ->label('Período')
+                                    ->columnSpan(['md' => 3])
+                                    ->options([
+                                        'M' => 'Manhã',
+                                        'T' => 'Tarde',
+                                        'N' => 'Noite'
+                                    ]),
 
-                                    Forms\Components\Toggle::make('active')
-                                        ->label('Ativo')
-                                        ->default(true),
+                                TextInput::make('teacher')
+                                    ->label('Professora')
+                                    ->columnSpan(['md' => 6])
+                                    ->disabled()
+                                    ->visible(fn (callable $get) => $get('showAdditionalFields') === true),
+
+                                TextInput::make('grade')
+                                    ->label('Série')
+                                    ->columnSpan(['md' => 6])
+                                    ->disabled()
+                                    ->visible(fn (callable $get) => $get('showAdditionalFields') === true),
+
+                                Textarea::make('observation')
+                                    ->label('Observação')
+                                    ->columnSpan(['md' => 12])
+                                    ->disabled()
+                            ])
+                ]),
+
+
+                Section::make('Informações do Pedido')->schema([
+                    Forms\Components\Grid::make(12) ->schema([
+                        ToggleButtons::make('delivery')
+                            ->label('Entrega')
+                            ->columnSpan(['md' => 4])
+                            ->default('N')
+                            ->inline()
+                            ->options([
+                                'E' => 'Entregar',
+                                'F' => 'Enviado',
+                                'N' => 'Não Requisitado',
+                            ])
+                            ->colors([
+                                'E' => 'info',
+                                'F' => 'success',
+                                'N' => 'danger',
+                            ])
+                            ->icons([
+                                'E' => 'heroicon-m-truck',
+                                'F' => 'heroicon-m-check-badge',
+                                'N' => 'heroicon-m-x-circle',
+                            ])
+                            ->visible(fn (callable $get) => $get('showAdditionalFields') === true),
+
+                        ToggleButtons::make('status')
+                            ->label('Status')
+                            ->inline()
+                            ->columnSpan(['md' => 4])
+                            ->default('P')
+                            ->options([
+                                'P' => 'Pendente',
+                                'I' => 'Impresso',
+                                'E' => 'Pago',
+                            ])
+                            ->colors([
+                                'P' => 'info',
+                                'I' => 'warning',
+                                'E' => 'success',
+                            ])
+                            -> icons([
+                                'P' => 'heroicon-m-currency-dollar',
+                                'I' => 'heroicon-m-newspaper',
+                                'E' => 'heroicon-m-check-badge',
+                            ]),
+
+                        Select::make('payment_method_id')
+                            -> label('Método de Pagamento')
+                            -> columnSpan(['md' => 4])
+                            -> required()
+                            -> searchable()
+                            -> preload()
+                            -> relationship('payment_method','name')
+                            -> default(1)
+                            -> createOptionForm([
+                                TextInput::make('name')
+                                    -> required()
+                                    -> maxLength(255),
+
+                                Forms\Components\Toggle::make('active')
+                                    -> required()
+                                    -> default(true),
                                 ])
-                                ->createOptionAction(function (FormAction $action) {
-                                    return $action
-                                        ->modalHeading('Criar Aluno')
-                                        ->modalSubmitActionLabel('Criar')
-                                        ->modalWidth('lg');
-                                })->columnSpan(['md' => 8]),
-                            
-                            TextInput::make('guardian')
-                                ->label('Responsável')
-                                ->columnSpan(['md' => 3])
-                                ->disabled()
-                                ->dehydrateStateUsing(fn ($state) => null)
-                                ->hidden(fn (string $operation): bool => $operation !== 'create')
-                        ]),
-
-                        Textarea::make('notes')
-                            ->label('Observações')
-                            ->columnSpanFull()
                     ]),
 
-                    Section::make('Itens do Pedido')->schema([
-                        Repeater::make('items')
-                            ->relationship()
-                            ->label("Itens")
-                            ->schema([
+                    Textarea::make('notes')
+                        ->label('Notas')
+                ]),
 
-                                Select::make('product_id')
-                                    -> label('Produto')
-                                    -> relationship('product','name', function ($query) {
-                                        $query->where('active',true);
-                                    })
-                                    -> searchable()
-                                    -> preload()
-                                    -> required()
-                                    -> distinct()
-                                    -> disableOptionsWhenSelectedInSiblingRepeaterItems()
-                                    -> columnSpan(['md' => 4])
-                                    -> reactive()
-                                    -> afterStateUpdated(fn ($state, Set $set) => $set('unit_amount', Product::find($state)?->price ?? 0))
-                                    -> afterStateUpdated(fn ($state, Set $set) => $set('total_amount', Product::find($state)?->price ?? 0)),
+                Section::make('Itens do Pedido')->schema([
+                    Repeater::make('items')
+                        ->relationship()
+                        ->label("Itens")
+                        ->schema([
 
-                                TextInput::make('quantity')
-                                    -> label('Quantidade')
-                                    -> numeric()
-                                    -> required()
-                                    -> default(1)
-                                    -> minValue(1)
-                                    -> columnSpan(['md' => 2])
-                                    -> reactive()
-                                    -> afterStateUpdated(fn ($state, Set $set, Get $get) => $set('total_amount', $state * $get('unit_amount'))),
+                            Select::make('product_id')
+                                -> label('Produto')
+                                -> relationship('product','name', function ($query) {
+                                    $query->where('active',true);
+                                })
+                                -> searchable()
+                                -> preload()
+                                -> required()
+                                -> distinct()
+                                -> disableOptionsWhenSelectedInSiblingRepeaterItems()
+                                -> columnSpan(['md' => 4])
+                                -> reactive()
+                                -> afterStateUpdated(fn ($state, Set $set) => $set('unit_amount', Product::find($state)?->price ?? 0))
+                                -> afterStateHydrated(fn ($state, Set $set) => $set('unit_amount', Product::find($state)?->price ?? 0))
+                                -> afterStateUpdated(fn ($state, Set $set) => $set('total_amount', Product::find($state)?->price ?? 0)),
 
-                                TextInput::make('unit_amount')
-                                    -> label('Valor Unitário')
-                                    -> prefix('R$')
-                                    -> numeric()
-                                    -> required()
-                                    -> disabled()
-                                    -> minvalue(1)
-                                    -> columnSpan(['md' => 3]),
+                            TextInput::make('quantity')
+                                -> label('Quantidade')
+                                -> numeric()
+                                -> required()
+                                -> default(1)
+                                -> minValue(1)
+                                -> columnSpan(['md' => 2])
+                                -> reactive()
+                                -> afterStateUpdated(fn ($state, Set $set, Get $get) => $set('total_amount', $state * $get('unit_amount'))),
 
-                                TextInput::make('total_amount')
-                                    -> label('Valor Total')
-                                    -> prefix('R$')
-                                    -> numeric()
-                                    -> required()
-                                    -> columnSpan(['md' => 3])
+                            TextInput::make('unit_amount')
+                                -> label('Valor Unitário')
+                                -> prefix('R$')
+                                -> numeric()
+                                -> required()
+                                -> disabled()
+                                -> minvalue(1)
+                                -> columnSpan(['md' => 3]),
 
-                            ])->columns(12),
+                            TextInput::make('total_amount')
+                                -> label('Valor Total')
+                                -> prefix('R$')
+                                -> numeric()
+                                -> required()
+                                -> columnSpan(['md' => 3])
 
-                            Placeholder::make('grand_total_placeholder')
-                            ->label('Valor Final')
-                            ->content(function (Get $get, Set $set){
-                                $total = 0;
-                                if (!$repeaters = $get('items')) {
-                                    return $total;
-                                }
+                        ])->columns(12),
 
-                                foreach ($repeaters as $key => $repeater) {
-                                    $total += $get("items.{$key}.total_amount");
-                                }
+                        Placeholder::make('grand_total_placeholder')
+                        ->label('Valor Final')
+                        ->content(function (Get $get, Set $set){
+                            $total = 0;
+                            if (!$repeaters = $get('items')) {
+                                return $total;
+                            }
 
-                                $set('grand_total', $total);
-                                return Number::currency($total, 'BRL');
-                            }),
+                            foreach ($repeaters as $key => $repeater) {
+                                $total += $get("items.{$key}.total_amount");
+                            }
 
-                            Hidden::make('grand_total')
-                            ->default(0)
-                    ])
+                            $set('grand_total', $total);
+                            return Number::currency($total, 'BRL');
+                        }),
+
+                        Hidden::make('grand_total')
+                        ->default(0)
+                ])
                 ])->columnSpanFull()
             ]);
     }
@@ -229,11 +335,54 @@ class OrderResource extends Resource
                     -> label('Cliente')
                     -> sortable()
                     -> searchable(),
-
+                    
                 TextColumn::make('grand_total')
                     -> label('Valor Total')
                     -> sortable()
                     -> money('BRL'),
+
+                TextColumn::make('period')
+                    -> label('Período')
+                    -> sortable()
+                    -> searchable()
+                    -> getStateUsing(function ($record) {
+                        return match($record->period) {
+                            'M' => 'Manhã',
+                            'T' => 'Tarde',
+                            'N' => 'Noite',
+                            default => 'Não definido',
+                        };
+                    }),
+
+                TextColumn::make('status')
+                    -> label('Status')
+                    -> sortable()
+                    -> searchable()
+                    -> getStateUsing(function ($record) {
+                        return match($record->status) {
+                            'P' => 'Pendente',
+                            'E' => 'Pago',
+                            'I' => 'Impresso',
+                            default => 'Não definido',
+                        };
+                    })
+                    -> badge()
+                    -> color(function ($state) {
+                        return match ($state) {
+                            'Pendente' => 'info',
+                            'Impresso' => 'warning',
+                            'Pago' => 'success',
+                            default => 'gray',
+                        };
+                    })
+                    ->icon(function ($state) {
+                        return match ($state) {
+                            'Pendente' => 'heroicon-m-currency-dollar',
+                            'Impresso' => 'heroicon-m-newspaper',
+                            'Pago' => 'heroicon-m-check-badge',
+                            default => 'heroicon-m-question-mark-circle'
+                        };
+                    }),
 
                 TextColumn::make('created_at')
                     -> label('Criado em')

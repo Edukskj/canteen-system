@@ -17,6 +17,11 @@ return new class extends Migration
             $table->string('name');
             $table->string('rm')->nullable();
             $table->boolean('active')->default(true);
+            $table->boolean('infantil')->default(false);
+            $table->string('teacher')->nullable();
+            $table->string('grade')->nullable();
+            $table->char('period',1)->nullable();
+            $table->string('observation')->nullable();
             $table->timestamps();
         });
     }

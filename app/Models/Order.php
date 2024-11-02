@@ -15,10 +15,16 @@ class Order extends Model
         'payment_method',
         'payment_status',
         'notes',
+        'period',
+        'status'
     ];
 
     public function student() {
         return $this->belongsTo(Student::class);
+    }
+
+    public function payment_method() {
+        return $this->belongsTo(PaymentMethod::class);
     }
 
     public function items() {

@@ -14,6 +14,11 @@ class Student extends Model
         'guardian_id',
         'rm',
         'active',
+        'infantil',
+        'teacher',
+        'grade',
+        'period',
+        'observation'
     ];
 
     public function guardian() {

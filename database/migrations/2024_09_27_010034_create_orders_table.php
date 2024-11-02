@@ -14,7 +14,11 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('student_id')->constrained('students')->cascadeOnDelete();
+            $table->string('payment_method_id')->constrained('payment_method')->cascadeOnDelete()->default('R');
             $table->decimal('grand_total', 10, 2)->nullable();
+            $table->char('delivery',1)->default('N');
+            $table->char('status',1)->default('P');
+            $table->char('period',1)->nullable();
             $table->text('notes')->nullable();
             $table->timestamps();
         });

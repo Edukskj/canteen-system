@@ -51,7 +51,7 @@ class GuardianResource extends Resource
                             -> mask('999.999.999-99')
                             -> placeholder('000.000.000-00')
                             -> validationAttribute('CPF')
-                            ->afterStateUpdated(function ($state, callable $set) {
+                            -> afterStateUpdated(function ($state, callable $set) {
                                 $cleanedCpf = preg_replace('/\D/', '', $state);
                                 $set('cpf', $cleanedCpf);
                             }),
@@ -63,7 +63,7 @@ class GuardianResource extends Resource
                             -> telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/')
                             -> mask('(99) 99999-9999')
                             -> validationAttribute('Celular')
-                            ->afterStateUpdated(function ($state, callable $set) {
+                            -> afterStateUpdated(function ($state, callable $set) {
                                 $cleanedPhone = preg_replace('/\D/', '', $state);
                                 $set('phone', $cleanedPhone);
                             }),

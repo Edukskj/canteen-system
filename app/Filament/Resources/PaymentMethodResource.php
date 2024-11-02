@@ -2,34 +2,34 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\CategorieResource\Pages;
-use App\Filament\Resources\CategorieResource\RelationManagers;
-use App\Models\Categorie;
+use App\Filament\Resources\PaymentMethodResource\Pages;
+use App\Filament\Resources\PaymentMethodResource\RelationManagers;
+use App\Models\PaymentMethod;
 use Filament\Forms;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\TextInput;
+use Filament\Support\Enums\Alignment;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Tables\Columns\Layout\Stack;
-use Filament\Support\Enums\Alignment;
 
-class CategorieResource extends Resource
+class PaymentMethodResource extends Resource
 {
-    protected static ?string $model = Categorie::class;
+    protected static ?string $model = PaymentMethod::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-tag';
     protected static ?string $activeNavigationIcon = 'heroicon-s-tag';
 
-    protected static ?string $navigationGroup = 'Vendas';
-    
-    protected static ?string $modelLabel = 'Categorias';
+    protected static ?string $navigationGroup = 'Movimentações';
 
-    protected static ?int $navigationSort = 3;
+    protected static ?string $modelLabel = 'Forma de Pagamento';
+    protected static ?string $pluralModelLabel = 'Formas de Pagamento';
+
+
+    protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
     {
@@ -57,7 +57,7 @@ class CategorieResource extends Resource
                     -> label('Nome') 
                     -> searchable() 
                     -> sortable(),
-             
+            
 
                 Tables\Columns\IconColumn::make('active')
                     -> label('Ativo')
@@ -91,9 +91,9 @@ class CategorieResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListCategories::route('/'),
-            'create' => Pages\CreateCategorie::route('/create'),
-            'edit' => Pages\EditCategorie::route('/{record}/edit'),
+            'index' => Pages\ListPaymentMethods::route('/'),
+            'create' => Pages\CreatePaymentMethod::route('/create'),
+            'edit' => Pages\EditPaymentMethod::route('/{record}/edit'),
         ];
     }
 }

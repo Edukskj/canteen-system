@@ -16,6 +16,7 @@ use Filament\Support\Enums\Alignment;
 use Filament\Tables;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Table;
+use Filament\Forms\Components\Actions\Action;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -76,13 +77,21 @@ class ProductResource extends Resource
                             -> relationship('category','name')
                             -> createOptionForm([
                                 TextInput::make('name')
+                                    -> label('Nome')
                                     -> required()
                                     -> maxLength(255),
 
                                 Forms\Components\Toggle::make('active')
+                                    -> label('Ativo')
                                     -> required()
                                     -> default(true),
                                 ])
+                                ->createOptionAction(function (Action $action) {
+                                    return $action
+                                        -> modalHeading('Criar Categoria')
+                                        -> modalSubmitActionLabel('Criar')
+                                        -> modalWidth('lg');
+                                }),
                     ]),
                     
                     Forms\Components\Section::make('Status')->schema([
