@@ -16,6 +16,7 @@ class Order extends Model
         'payment_status',
         'notes',
         'period',
+        'delivery',
         'status'
     ];
 

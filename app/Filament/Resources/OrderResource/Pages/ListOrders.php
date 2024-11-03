@@ -6,6 +6,7 @@ use App\Filament\Resources\OrderResource;
 use App\Filament\Resources\OrderResource\Widgets\OrderStats;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
+use Filament\Resources\Components\Tab;
 
 class ListOrders extends ListRecords
 {
@@ -22,6 +23,13 @@ class ListOrders extends ListRecords
     {
         return [
             OrderStats::class
+        ];
+    }
+
+    public function getTabs(): array {
+        return [
+            null => Tab::make('Todos'),
+            'Entregar' => Tab::make()->query(fn ($query) => $query->where('delivery','E'))
         ];
     }
 }

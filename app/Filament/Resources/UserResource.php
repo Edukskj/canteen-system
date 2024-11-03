@@ -133,7 +133,8 @@ class UserResource extends Resource
                         return Excel::download(new UsersExport($records), 'users.xlsx');
                     })
                 ]),
-            ]);
+            ])
+            ->defaultSort('created_at', 'desc');
     }
 
     public static function getRelations(): array

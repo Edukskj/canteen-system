@@ -26,13 +26,16 @@ class Guardian extends Model
         return $this->hasMany(Transaction::class);
     }
 
-    public function adicionaSaldo($valor) {
-        $this->wallet = $this->wallet + $valor;
+    public function adicionaSaldo($valor)
+    {
+        $this->wallet += $valor;
         $this->save();
     }
 
-    public function retiraSaldo($valor) {
-        $this->wallet = $this->wallet - $valor;
+    public function retiraSaldo($valor)
+    {
+        $this->wallet -= $valor;
         $this->save();
     }
+
 }

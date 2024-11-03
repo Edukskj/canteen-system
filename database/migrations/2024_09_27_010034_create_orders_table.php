@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('student_id')->constrained('students')->cascadeOnDelete();
             $table->string('payment_method_id')->constrained('payment_method')->cascadeOnDelete()->default('R');
-            $table->decimal('grand_total', 10, 2)->nullable();
+            $table->decimal('grand_total', 10, 2)->default(0);
+            $table->decimal('amount_paid', 10, 2)->default(0);
             $table->char('delivery',1)->default('N');
             $table->char('status',1)->default('P');
             $table->char('period',1)->nullable();

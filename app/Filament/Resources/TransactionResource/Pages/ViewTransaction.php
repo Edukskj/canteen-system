@@ -13,25 +13,33 @@ class ViewTransaction extends ViewRecord
 
     protected function getHeaderActions(): array
     {
-        return [
-            Actions\Action::make('runReversal')
-                ->label('Estornar')
-                ->action(function () {
-                    $transaction = $this->record;
-                    
-                    if ($transaction->type === 'S') {
-                        $reversalType = 'E';
-                    } else {
-                        $reversalType = 'S';
-                    };
-
-                    $tran = Transaction::find($transaction->id);
-                    $tran->reversal($reversalType);
-
-                })
-                ->requiresConfirmation()
-                ->color('info')
-                ->hidden($this->record->type === 'R'),
-        ];
+        if ($this->record->type !== 'R') {
+            return [
+                Actions\Action::make('runReversal')
+                    ->label('Estornar')
+                    ->action(function () {
+                        $transaction = $this->record;
+                        
+                        if ($transaction->type === 'S') {
+                            $reversalType = 'E';
+                        } else {
+                            $reversalType = 'S';
+                        };
+    
+                        $tran = Transaction::find($transaction->id);
+                        $tran->reversal($reversalType);
+    
+                    })
+                    ->requiresConfirmation()
+                    ->color('info')
+            ];
+        } else {
+            return [
+                Actions\Action::make('estornado')
+                    ->label('Estornado')
+                    ->disabled()
+                    ->color('gray')
+            ];
+        }
     }
 }

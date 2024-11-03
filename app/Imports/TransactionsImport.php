@@ -19,13 +19,17 @@ class TransactionsImport implements ToModel, WithHeadingRow
     */
     public function model(array $row)
     {
-        return new Transaction([
-            'student_id'  => $row['aluid'],
-            'guardian_id' => $row['respid'],
+        $transaction = Transaction::create([
+            'student_id'  => $row['aluno_id'],
+            'guardian_id' => $row['resp_id'],
             'value' => $row['valor'],
             'notes' => $row['observacao'],
             'type' => $row['tipo'],
         ]);
+
+        $transaction->processTransaction();
+
+        return $transaction;
     }
 
 }

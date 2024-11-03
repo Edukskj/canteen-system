@@ -190,7 +190,7 @@ class OrderResource extends Resource
                     Forms\Components\Grid::make(12) ->schema([
                         ToggleButtons::make('delivery')
                             ->label('Entrega')
-                            ->columnSpan(['md' => 4])
+                            ->columnSpan(['md' => 5])
                             ->default('N')
                             ->inline()
                             ->options([
@@ -201,7 +201,7 @@ class OrderResource extends Resource
                             ->colors([
                                 'E' => 'info',
                                 'F' => 'success',
-                                'N' => 'danger',
+                                'N' => 'gray',
                             ])
                             ->icons([
                                 'E' => 'heroicon-m-truck',
@@ -233,7 +233,7 @@ class OrderResource extends Resource
 
                         Select::make('payment_method_id')
                             -> label('Método de Pagamento')
-                            -> columnSpan(['md' => 4])
+                            -> columnSpan(['md' => 3])
                             -> required()
                             -> searchable()
                             -> preload()
@@ -343,8 +343,6 @@ class OrderResource extends Resource
 
                 TextColumn::make('period')
                     -> label('Período')
-                    -> sortable()
-                    -> searchable()
                     -> getStateUsing(function ($record) {
                         return match($record->period) {
                             'M' => 'Manhã',
@@ -352,12 +350,11 @@ class OrderResource extends Resource
                             'N' => 'Noite',
                             default => 'Não definido',
                         };
-                    }),
+                    })
+                    -> toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('status')
                     -> label('Status')
-                    -> sortable()
-                    -> searchable()
                     -> getStateUsing(function ($record) {
                         return match($record->status) {
                             'P' => 'Pendente',
@@ -384,6 +381,35 @@ class OrderResource extends Resource
                         };
                     }),
 
+                TextColumn::make('delivery')
+                    -> label('Entrega')
+                    -> getStateUsing(function ($record) {
+                        return match($record->delivery) {
+                            'E' => 'Entregar',
+                            'F' => 'Enviado',
+                            'N' => 'Não Requisitado',
+                            default => 'Não Requisitado',
+                        };
+                    })
+                    -> badge()
+                    -> color(function ($state) {
+                        return match ($state) {
+                            'Entregar' => 'info',
+                            'Enviado' => 'success',
+                            'Não Requisitado' => 'gray',
+                            default => 'gray',
+                        };
+                    })
+                    -> icon(function ($state) {
+                        return match ($state) {
+                            'Entregar' => 'heroicon-m-truck',
+                            'Enviado' => 'heroicon-m-check-badge',
+                            'Não Requisitado' => 'heroicon-m-x-circle',
+                            default => 'heroicon-m-x-circle'
+                        };
+                    })
+                    -> toggleable(isToggledHiddenByDefault: true),
+
                 TextColumn::make('created_at')
                     -> label('Criado em')
                     -> sortable()
@@ -391,7 +417,7 @@ class OrderResource extends Resource
                     -> visibleFrom('md'),
 
                 TextColumn::make('updated_at')
-                    -> label('Atualizado em')
+                    -> label('Atualizado há')
                     -> dateTime()
                     -> sortable()
                     -> since()
@@ -416,7 +442,8 @@ class OrderResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
-            ->poll('25s');
+            ->poll('25s')
+            ->defaultSort('created_at', 'desc');
     }
 
     public static function getRelations(): array

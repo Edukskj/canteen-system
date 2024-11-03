@@ -4,7 +4,7 @@ namespace App\Filament\Resources\TransactionResource\Pages;
 
 use App\Filament\Resources\TransactionResource;
 use Filament\Actions;
-use App\Models\Guardian;
+use App\Models\Transaction; // Importar o modelo Transaction
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateTransaction extends CreateRecord
@@ -13,18 +13,12 @@ class CreateTransaction extends CreateRecord
 
     protected function afterCreate(): void
     {
-        /** @var Transaction $order */
+        /** @var Transaction $transaction */
         $transaction = $this->record;
 
-        $guardian = Guardian::find($transaction->guardian_id);
-        
-        if ($guardian){
-            if ($transaction->type === 'E') {
-                $guardian->adicionaSaldo($transaction->value);
-            } else {
-                $guardian->retiraSaldo($transaction->value);
-            }
-        }
-
+        // Chama o método do modelo para processar a transação
+        $transaction->processTransaction(); // Certifique-se que está chamando do objeto Transaction
     }
+
 }
+

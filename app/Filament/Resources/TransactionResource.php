@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\TransactionsExport;
 use Filament\Forms\Get;
+use Filament\Support\Enums\IconPosition;
 
 class TransactionResource extends Resource
 {
@@ -37,6 +38,7 @@ class TransactionResource extends Resource
 
     public static function form(Form $form): Form
     {
+        
         return $form
         ->schema([
             Section::make('Informações do Pagamento')->schema([
@@ -182,6 +184,12 @@ class TransactionResource extends Resource
                         }
                         return $record->type === 'E' ? 'success' : ($record->type === 'S' ? 'danger' : 'gray');
                     })
+                    -> icon(function ($record) {
+                        if ($record->value == 0) {
+                            return 'heroicon-m-minus';
+                        }
+                        return $record->type === 'E' ? 'heroicon-m-arrow-trending-up' : ($record->type === 'S' ? 'heroicon-m-arrow-trending-down' : 'heroicon-m-minus');
+                    })
                     -> label('Valor')
                     -> sortable()
                     -> money('BRL'),
@@ -202,20 +210,19 @@ class TransactionResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\ActionGroup::make([
-                    Tables\Actions\ViewAction::make(),
-                ])
+                Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     BulkAction::make('export')
-                    -> label('Export to Excel')
+                    -> label('Exportar para Excel')
                     -> icon('heroicon-o-document-arrow-down')
                     -> action(function(Collection $records) {
                         return Excel::download(new TransactionsExport($records), 'movimentacoes.xlsx');
                     })
                 ]),
-            ]);
+            ])
+            ->defaultSort('created_at', 'desc');
     }
 
     public static function getRelations(): array

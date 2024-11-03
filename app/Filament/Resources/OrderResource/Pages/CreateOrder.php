@@ -4,6 +4,7 @@ namespace App\Filament\Resources\OrderResource\Pages;
 
 use App\Filament\Resources\OrderResource;
 use App\Models\Student;
+use App\Models\Transaction; // Importar o modelo Transaction
 use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
@@ -17,9 +18,9 @@ class CreateOrder extends CreateRecord
         $order = $this->record;
 
         $student = Student::find($order->student_id);
-        if ($student){
+        if ($student) {
             $student->adicionaSaldoRepres($order->grand_total);
         }
-
     }
+
 }

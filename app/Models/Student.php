@@ -30,6 +30,7 @@ class Student extends Model
     }
 
     public function adicionaSaldoRepres($valor) {
+        // Cria uma nova transação para adicionar saldo ao guardião
         $data = [
             'guardian_id' => $this->guardian_id,
             'student_id' => $this->id,
@@ -38,6 +39,7 @@ class Student extends Model
             'notes' => 'Movimentação criada automaticamente pelo Pedido de Venda'
         ];
         
+        // Chama o método do modelo Transaction para criar a transação
         Transaction::createTransaction($data);
     }
 }
