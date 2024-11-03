@@ -15,6 +15,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextArea;
 use Filament\Forms\Components\Actions\Action;
 
 class StudentResource extends Resource
@@ -124,7 +125,7 @@ class StudentResource extends Resource
                             -> visible(fn (callable $get) => $get('infantil') === true),
                         
 
-                        Forms\Components\TextArea::make('observation')
+                        TextArea::make('observation')
                             -> label('Observação')
                             -> columnSpanFull(),
 

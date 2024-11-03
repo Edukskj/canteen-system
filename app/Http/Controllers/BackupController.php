@@ -4,24 +4,27 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Log;
 
 class BackupController extends Controller
 {
 
     public function runBackup()
-{
-    try {
-        $output = shell_exec('php artisan backup:run 2>&1'); // Executa o comando e captura a saída
-        Log::info('Saída do backup: ' . $output);
+    {
+        // Chama o comando artisan de backup
+        Artisan::call('backup:run');
 
-        return redirect()->back()->with('success', 'Backup realizado com sucesso!');
-    } catch (\Exception $e) {
-        Log::error('Erro ao realizar o backup: ' . $e->getMessage());
+        Notification::make()
+        ->title('Backup realizado com sucesso!')
+        ->success()
+        ->send();
 
-        return redirect()->back()->with('error', 'Erro ao realizar o backup: ' . $e->getMessage());
+        // Opcionalmente, você pode obter a saída do comando
+        $output = Artisan::output();
+
+        // Redireciona ou retorna uma resposta
+        return redirect()->back()->with('success', 'Backup realizado com sucesso!')->with('output', $output);
     }
-}
-
     
 }
