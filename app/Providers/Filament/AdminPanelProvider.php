@@ -27,18 +27,16 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
+            ->brandLogo(asset('img/logo.png'))
+            ->favicon(asset('img/logo.png'))
             ->login()
             ->colors([
-                'primary' => Color::Indigo,
+                'primary' => '#DB4646',
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
+            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->pages([])
-            ->widgets([
-                'App\\Filament\\Widgets\StatsWidget',
-                'App\\Filament\\Widgets\TestWidget',
-                'App\\Filament\\Widgets\CategorieWidget'
-            ])
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,

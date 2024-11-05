@@ -10,6 +10,8 @@ use Flowframe\Trend\TrendValue;
 
 class CategorieWidget extends ChartWidget
 {
+    protected static ?int $sort = 2;
+
     protected static ?string $heading = 'Pedidos por Categorias - Últimos 30 dias';
 
     protected int | string | array $columnSpan = 1;

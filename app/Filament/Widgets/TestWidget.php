@@ -11,6 +11,8 @@ use Flowframe\Trend\TrendValue;
 
 class TestWidget extends ChartWidget
 {
+    protected static ?int $sort = 1;
+
     use InteractsWithPageFilters;
 
     protected static ?string $heading = 'Vendas Realizadas';

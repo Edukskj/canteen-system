@@ -12,6 +12,14 @@ use Filament\Forms\Form;
 
 class Dashboard extends \Filament\Pages\Dashboard
 {
+
+    protected static ?string $title = 'Dashboard';
+
+    public static function getNavigationIcon(): ?string
+    {
+        return 'heroicon-o-chart-bar';
+    }
+
     use HasFiltersForm;
 
     public function filtersForm(Form $form): Form
