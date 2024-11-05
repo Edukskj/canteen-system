@@ -45,21 +45,21 @@
     <div class="branding d-flex align-items-cente">
 
       <div class="container position-relative d-flex align-items-center justify-content-between">
-        <a href="index.html" class="logo d-flex align-items-center">
+        <a href="index-en.html" class="logo d-flex align-items-center">
           <!-- Uncomment the line below if you also wish to use an image logo -->
           <img src="img/logo.png" alt="">
         </a>
 
         <nav id="navmenu" class="navmenu">
           <ul>
-            <li><a href="#hero" class="active">Inicio</a></li>
-            <li><a href="#about">Sobre</a></li>
-            <li><a href="#services">Princípios</a></li>
-            <li><a href="#team">Equipe</a></li>
-            <li><a href="#contact">Contato</a></li>
-            <a href="#" class="logo d-flex align-items-center">
+            <li><a href="#hero" class="active">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#services">Principles</a></li>
+            <li><a href="#team">Team</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <a href="/" class="logo d-flex align-items-center">
               <!-- Uncomment the line below if you also wish to use an image logo -->
-              <img src="img/brazil.png" alt="">
+              <img src="img/usa.png" alt="">
             </a>
 
           </ul>
@@ -82,9 +82,9 @@
         <div class="carousel-item active">
           <img src="img/hero-carousel/hero-carousel-1.jpg" alt="">
           <div class="carousel-container">
-            <h2>Conheça nossa cantina!<br></h2>
+            <h2>Get to know our canteen!<br></h2>
             <p></p>
-            <a href="#about" class="btn-get-started">Clique Aqui!</a>
+            <a href="#about" class="btn-get-started">Click here!</a>
           </div>
         </div><!-- End Carousel Item -->
       </div>
@@ -96,25 +96,25 @@
 
       <!-- Section Title -->
       <div class="container section-title" data-aos="fade-up">
-        <h2>Sobre</h2>
+        <h2>About</h2>
       </div><!-- End Section Titl e -->
 
       <div class="container">
 
         <div class="row gy-4">
           <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
-            <h3>Fazemos de tudo para o seu melhor!</h3>
+            <h3>We do all for your best!</h3>
             <img src="img/about.jpg" class="img-fluid rounded-4 mb-4" alt="">
-            <p>Nós surgimos à partir de um convite feito por Jaime Klava, Diretor do Colégio Politec! Viemos para alimentar e abastecer os alunos da escola com comida e bebidas. </p>
+            <p>We emerged from an invitation made by Jaime Klava, Director of Politec School! We are here to nourish and provide students with food and beverages.</p>
             
           </div>
           <div class="col-lg-6" data-aos="fade-up" data-aos-delay="250">
             <div class="content ps-0 ps-lg-5">
-              <p>O espaço onde estamos hoje, era ocupado na por outra empresa há alguns anos, tivemos que comprar o espaço do antigo dono, e atualmente, estamos localizados no mesmo local que eles!</p>
+              <p>The space we occupy today was previously occupied by another company a few years ago. We had to purchase the space from the former owner, and currently, we are located in the same place they were!</p>
 
               <div class="position-relative mt-4">
                 <img src="img/about-2.jpg" class="img-fluid rounded-4" alt="">
-                <a href="https://www.youtube.com/watch?v=Y7f98aduVJ8" class="glightbox pulsating-play-btn"></a>
+                
               </div>
             </div>
           </div>
@@ -133,7 +133,7 @@
 
       <!-- Section Title -->
       <div class="container section-title" data-aos="fade-up">
-        <h2>Princípios</h2>
+        <h2>Principles</h2>
       </div><!-- End Section Title -->
 
       <div class="container">
@@ -146,8 +146,8 @@
                 <i class="bi bi-cloud-plus-fill"></i>
               </div>
               
-                <h3>Qualidade</h3>
-            <p>Todos nossos produtos tem a melhor qualidade!</p>
+                <h3>Quality</h3>
+            <p>All of our products has the best quality!</p>
             </div>
           </div><!-- End Service Item -->
 
@@ -156,8 +156,8 @@
               <div class="icon">
                 <i class="bi bi-envelope-paper-heart-fill"></i>
               </div>
-                <h3>Respeito e Responsabilidade</h3>
-              <p>Faz parte de nós, tratamos nossa equipe e nossos clientes com muito respeito. Também mantendo sempre a higiene com um ambiente agradável e saudável.</p>
+                <h3>Respect and Responsibility</h3>
+              <p>It’s part of who we are. We treat our team and our customers with great respect while always maintaining hygiene in a pleasant and healthy environment.</p>
             </div>
           </div><!-- End Service Item -->
 
@@ -166,8 +166,8 @@
               <div class="icon">
                 <i class="bi bi-emoji-smile-fill"></i>
               </div>
-                <h3>Otimismo</h3>
-              <p>Fazemos nosso máximo pra passar a melhor energia que conseguirmos!</p>
+                <h3>Optimism</h3>
+              <p>We do our best to share the best energy we can!</p>
             </div>
           </div><!-- End Service Item -->
 
@@ -188,7 +188,7 @@
 
       <!-- Section Title -->
       <div class="container section-title" data-aos="fade-up">
-        <h2>Equipe</h2>
+        <h2>Team</h2>
       </div><!-- End Section Title -->
 
       <div class="container" data-aos="fade-up" data-aos-delay="100">
@@ -205,7 +205,7 @@
 
                 </div>
                 <h4>Tatiana</h4>
-                <span>Atendente</span>
+                <span>Attendant</span>
               </div>
             </div>
           </div><!-- End Team Member -->
@@ -219,7 +219,7 @@
                 <div class="social">
                 </div>
                 <h4>Dora</h4>
-                <span>Cozinheira</span>
+                <span>Cook</span>
               </div>
             </div>
           </div><!-- End Team Member -->
@@ -233,7 +233,7 @@
                 <div class="social">
                 </div>
                 <h4>Simone</h4>
-                <span>Atendente</span>
+                <span>Attendant</span>
               </div>
             </div>
           </div><!-- End Team Member -->
@@ -254,7 +254,7 @@
 
       <!-- Section Title -->
       <div class="container section-title" data-aos="fade-up">
-        <h2>Contato</h2>
+        <h2>Contact</h2>
         <p></p>
       </div><!-- End Section Title -->
 
@@ -265,7 +265,7 @@
           <div class="col-lg-6">
             <div class="info-item d-flex flex-column justify-content-center align-items-center" data-aos="fade-up" data-aos-delay="200">
               <i class="bi bi-geo-alt"></i>
-              <h3>Endereço</h3>
+              <h3>Address</h3>
               <p>Av. Brasil Sul, 2001 - Parque Res. Nardini, Americana - SP, 13465-770</p>
             </div>
           </div><!-- End Info Item -->
@@ -273,8 +273,8 @@
           <div class="col-lg-3 col-md-6">
             <div class="info-item d-flex flex-column justify-content-center align-items-center" data-aos="fade-up" data-aos-delay="300">
               <i class="bi bi-telephone"></i>
-              <h3>Telefone</h3>
-              <p>(19) 98959-0202</p>
+              <h3>Phone</h3>
+              <p>+55 (19) 98959-0202</p>
             </div>
           </div><!-- End Info Item -->
 
@@ -288,7 +288,7 @@
 
         </div>
 
-        <form action="contact.php" method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="400">
+        <form action="forms/contact.php" method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="400">
           <div class="row gy-4">
 
             <div class="col-md-6">
@@ -308,11 +308,11 @@
             </div>
 
             <div class="col-md-12 text-center">
-              <div class="loading">Carregando...</div>
+              <div class="loading">Loading...</div>
               <div class="error-message"></div>
-              <div class="sent-message">Sua mensagem foi enviada! Obrigado!</div>
+              <div class="sent-message">Your message was sent! Thank you!</div>
 
-              <button type="submit">Enviar Mensagem</button>
+              <button type="submit">Send message</button>
             </div>
 
           </div>
@@ -329,13 +329,13 @@
     <div class="container footer-top">
       <div class="row gy-4">
         <div class="col-lg-4 col-md-6 footer-about">
-          <a href="index.html" class="logo d-flex align-items-center">
+          <a href="index-en.html" class="logo d-flex align-items-center">
             <img src="img/logo.png" alt="">
           </a>
           <div class="footer-contact pt-3">
             <p>Av. Brasil Sul, 2001</p>
             <p>Parque Res. Nardini, Americana - SP, 13465-770</p>
-            <p class="mt-3"><strong>Telefone:</strong> <span>(19) 98959-0202</span></p>
+            <p class="mt-3"><strong>Phone:</strong> <span>+55 (19) 98959-0202</span></p>
             <p><strong>Email:</strong> <span>tiasa@gmail.com</span></p>
           </div>
           <div class="social-links d-flex mt-4">
@@ -346,13 +346,13 @@
         </div>
 
         <div class="col-lg-2 col-md-3 footer-links">
-          <h4>Links úteis</h4>
+          <h4>Useful links</h4>
           <ul>
-            <li><a href="#hero">Inicio</a></li>
-            <li><a href="#about">Sobre</a></li>
-            <li><a href="#services">Princípios</a></li>
-            <li><a href="#team">Equipe</a></li>
-            <li><a href="#contact">Contato</a></li>
+            <li><a href="#hero">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#services">Principles</a></li>
+            <li><a href="#team">Team</a></li>
+            <li><a href="#contact">Contact</a></li>
           </ul>
         </div>
 
@@ -376,7 +376,6 @@
   <!-- Scroll Top -->
   <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-
   <!-- Vendor JS Files -->
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="vendor/php-email-form/validate.js"></script>
@@ -390,10 +389,9 @@
   <!-- Main JS File -->
   <script src="js/main.js"></script>
   <script src="{{ asset('vendor/aos/aos.js') }}"></script>
-    <script>
-        AOS.init();
-    </script>
-
+  <script>
+      AOS.init();
+  </script>
 
 </body>
 

@@ -5,7 +5,11 @@ use App\Http\Controllers\DownloadPdfController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('index');
+});
+
+Route::get('/index-en', function () {
+    return view('english');
 });
 
 Route::get('admin/pdf', [DownloadPdfController::class, 'download'])->name('order.pdf.download');

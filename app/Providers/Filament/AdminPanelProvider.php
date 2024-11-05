@@ -18,6 +18,7 @@ use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Filament\Navigation\MenuItem;
+use Illuminate\Contracts\View\View;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -57,6 +58,10 @@ class AdminPanelProvider extends PanelProvider
                 'Clientes',
                 'Admin',
             ])
+            // ->renderHook(
+            //     'panels::body.end',
+            //     fn (): View => view('footer')
+            // )
             ->sidebarCollapsibleOnDesktop()
             ->userMenuItems([
                 MenuItem::make()
