@@ -13,15 +13,14 @@ use Carbon\Carbon;
 
 class StatsWidget extends BaseWidget
 {
-
     protected static ?int $sort = 0;
 
     use InteractsWithPageFilters;
 
     protected function getStats(): array
     {
-        $defaultStart = Carbon::now()->startOfMonth();
-        $defaultEnd = Carbon::now()->endOfMonth();
+        $defaultStart = Carbon::now()->subDays(30); // Últimos 30 dias
+        $defaultEnd = Carbon::now();
 
         $start = !empty($this->filters['startDate']) ? Carbon::parse($this->filters['startDate']) : $defaultStart;
         $end = !empty($this->filters['endDate']) ? Carbon::parse($this->filters['endDate']) : $defaultEnd;
@@ -40,75 +39,62 @@ class StatsWidget extends BaseWidget
             return Number::format($number / 1000000, 2) . 'm';
         };
 
-        $receitaMensalAtual = 0;
-        $receitaMensalAtual = Order::
-            when($start, fn($query) => $query->whereDate('created_at', '>=', $start))
-            ->when($end, fn($query) => $query->whereDate('created_at', '<=', $end))
+        // Receita dos últimos 30 dias
+        $receitaAtual = Order::whereBetween('created_at', [$start, $end])
             ->where('status', 'E')
             ->sum('amount_paid') ?? 0;
 
-        $receitaMensalPassada = 0;
-        if (empty($this->filters['startDate']) && empty($this->filters['endDate'])) {
-            $startPassado = Carbon::now()->subMonth()->startOfMonth();
-            $endPassado = Carbon::now()->subMonth()->endOfMonth();
-
-            $receitaMensalPassada = Order::
-                whereDate('created_at', '>=', $startPassado)
-                ->whereDate('created_at', '<=', $endPassado)
-                ->where('status', 'E')
-                ->sum('amount_paid') ?? 0;
-        }
-
+        $receitaAnterior = 0;
         $description = '';
         $icon = '';
+        $name = 'Receita no Período';
         $color = 'success';
 
+        // Apenas calcula a variação se não houver filtros de data personalizados
         if (empty($this->filters['startDate']) && empty($this->filters['endDate'])) {
-            if ($receitaMensalAtual > $receitaMensalPassada) {
-                $description = 'R$ ' . $formatNumber($receitaMensalAtual - $receitaMensalPassada) . ' de aumento';
+            $receitaAnterior = Order::whereBetween('created_at', [$start->copy()->subDays(30), $end->copy()->subDays(30)])
+                ->where('status', 'E')
+                ->sum('amount_paid') ?? 0;
+
+            if ($receitaAtual > $receitaAnterior) {
+                $description = 'R$ ' . $formatNumber($receitaAtual - $receitaAnterior) . ' de aumento';
+                $name = 'Receita - Últimos 30 Dias';
                 $icon = 'heroicon-o-arrow-trending-up';
                 $color = 'success';
-            } elseif ($receitaMensalAtual < $receitaMensalPassada) {
-                $description = 'R$ ' . $formatNumber($receitaMensalPassada - $receitaMensalAtual) . ' de queda';
+            } elseif ($receitaAtual < $receitaAnterior) {
+                $description = 'R$ ' . $formatNumber($receitaAnterior - $receitaAtual) . ' de queda';
+                $name = 'Receita - Últimos 30 Dias';
                 $icon = 'heroicon-o-arrow-trending-down';
                 $color = 'danger';
             } else {
+                $name = 'Receita - Últimos 30 Dias';
                 $description = 'Sem variação';
                 $icon = 'heroicon-o-minus';
                 $color = 'gray';
             }
         }
 
-        // Estatísticas de Vendas
-        $vendasAtual = Order::
-            when($start, fn($query) => $query->whereDate('created_at', '>=', $start))
-            ->when($end, fn($query) => $query->whereDate('created_at', '<=', $end))
+        // Contagem de vendas dos últimos 30 dias
+        $vendasAtual = Order::whereBetween('created_at', [$start, $end])
             ->where('status', 'E')
             ->count();
 
-        $vendasPassada = 0;
-        if (empty($this->filters['startDate']) && empty($this->filters['endDate'])) {
-            $startPassado = Carbon::now()->subMonth()->startOfMonth();
-            $endPassado = Carbon::now()->subMonth()->endOfMonth();
-
-            $vendasPassada = Order::
-                whereDate('created_at', '>=', $startPassado)
-                ->whereDate('created_at', '<=', $endPassado)
-                ->where('status', 'E')
-                ->count();
-        }
-
+        $vendasAnterior = 0;
         $description2 = '';
         $icon2 = '';
         $color2 = 'success';
 
         if (empty($this->filters['startDate']) && empty($this->filters['endDate'])) {
-            if ($vendasAtual > $vendasPassada) {
-                $description2 = 'R$ ' . $formatNumber($vendasAtual - $vendasPassada) . ' de aumento';
+            $vendasAnterior = Order::whereBetween('created_at', [$start->copy()->subDays(30), $end->copy()->subDays(30)])
+                ->where('status', 'E')
+                ->count();
+
+            if ($vendasAtual > $vendasAnterior) {
+                $description2 = 'R$ ' . $formatNumber($vendasAtual - $vendasAnterior) . ' de aumento';
                 $icon2 = 'heroicon-o-arrow-trending-up';
                 $color2 = 'success';
-            } elseif ($vendasAtual < $vendasPassada) {
-                $description2 = 'R$ ' . $formatNumber($vendasPassada - $vendasAtual) . ' de queda';
+            } elseif ($vendasAtual < $vendasAnterior) {
+                $description2 = 'R$ ' . $formatNumber($vendasAnterior - $vendasAtual) . ' de queda';
                 $icon2 = 'heroicon-o-arrow-trending-down';
                 $color2 = 'danger';
             } else {
@@ -118,38 +104,29 @@ class StatsWidget extends BaseWidget
             }
         }
 
-        // Estatísticas de Pendentes
-        $pendenteAtual = Order::
-            when($start, fn($query) => $query->whereDate('created_at', '>=', $start))
-            ->when($end, fn($query) => $query->whereDate('created_at', '<=', $end))
+        // Receita pendente dos últimos 30 dias
+        $pendenteAtual = Order::whereBetween('created_at', [$start, $end])
             ->where('status', 'P')
             ->select(DB::raw('SUM(grand_total - amount_paid) as total'))
             ->value('total') ?? 0;
 
-        $pendentePassada = 0;
-        if (empty($this->filters['startDate']) && empty($this->filters['endDate'])) {
-            $startPassado = Carbon::now()->subMonth()->startOfMonth();
-            $endPassado = Carbon::now()->subMonth()->endOfMonth();
-
-            $pendentePassada = Order::
-                whereDate('created_at', '>=', $startPassado)
-                ->whereDate('created_at', '<=', $endPassado)
-                ->where('status', 'P')
-                ->select(DB::raw('SUM(grand_total - amount_paid) as total'))
-                ->value('total') ?? 0;
-        }
-
+        $pendenteAnterior = 0;
         $description3 = '';
         $icon3 = '';
         $color3 = 'success';
 
         if (empty($this->filters['startDate']) && empty($this->filters['endDate'])) {
-            if ($pendenteAtual > $pendentePassada) {
-                $description3 = 'R$ ' . $formatNumber($pendenteAtual - $pendentePassada) . ' de aumento';
+            $pendenteAnterior = Order::whereBetween('created_at', [$start->copy()->subDays(30), $end->copy()->subDays(30)])
+                ->where('status', 'P')
+                ->select(DB::raw('SUM(grand_total - amount_paid) as total'))
+                ->value('total') ?? 0;
+
+            if ($pendenteAtual > $pendenteAnterior) {
+                $description3 = 'R$ ' . $formatNumber($pendenteAtual - $pendenteAnterior) . ' de aumento';
                 $icon3 = 'heroicon-o-arrow-trending-up';
                 $color3 = 'success';
-            } elseif ($pendenteAtual < $pendentePassada) {
-                $description3 = 'R$ ' . $formatNumber($pendentePassada - $pendenteAtual) . ' de queda';
+            } elseif ($pendenteAtual < $pendenteAnterior) {
+                $description3 = 'R$ ' . $formatNumber($pendenteAnterior - $pendenteAtual) . ' de queda';
                 $icon3 = 'heroicon-o-arrow-trending-down';
                 $color3 = 'danger';
             } else {
@@ -160,7 +137,7 @@ class StatsWidget extends BaseWidget
         }
 
         return [
-            Stat::make('Receita Mensal', 'R$ ' . $formatNumber($receitaMensalAtual))
+            Stat::make($name, 'R$ ' . $formatNumber($receitaAtual))
                 ->description($description)
                 ->descriptionIcon($icon)
                 ->chart([15, 25, 15, 8, 17, 5, 25, 14, 26])
