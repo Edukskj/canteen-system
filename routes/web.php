@@ -8,5 +8,5 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('admin/{record}/pdf', [DownloadPdfController::class, 'download'])->name('order.pdf.download');
+Route::get('admin/pdf', [DownloadPdfController::class, 'download'])->name('order.pdf.download');
 Route::post('admin/backup/run', [BackupController::class, 'runBackup'])->name('backup.run');

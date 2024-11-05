@@ -46,15 +46,17 @@
             </tr>
             <tr class="items">
                 @foreach($data as $item)
+                <tr> <!-- Adicione a tag <tr> aqui para cada item -->
                     <td>
-                        {{ $item['student_id'] }}
+                        {{ $item->id }} <!-- Use o atributo id do modelo Order -->
                     </td>
                     <td>
-                        R$ {{ $item['grand_total'] }}
+                        R$ {{ number_format($item->grand_total, 2, ',', '.') }} <!-- Formate o preço corretamente -->
                     </td>
                     <td>
-                        {{ $item['created_at'] }}
+                        {{ $item->created_at->format('d/m/Y H:i') }} <!-- Formate a data -->
                     </td>
+                </tr>
                 @endforeach
             </tr>
         </table>

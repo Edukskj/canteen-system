@@ -34,6 +34,9 @@ use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\QueryBuilder\Constraints\DateConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\NumberConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
+use Illuminate\Support\Collection;
+use Filament\Tables\Actions\BulkAction;
+
 
 class OrderResource extends Resource
 {
@@ -336,6 +339,11 @@ class OrderResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('id')
+                    -> label('ID')
+                    -> sortable()
+                    -> searchable(),
+
                 TextColumn::make('student.name')
                     -> label('Cliente')
                     -> sortable()
@@ -450,15 +458,18 @@ class OrderResource extends Resource
                     Tables\Actions\ViewAction::make(),
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\DeleteAction::make(),
-                    Action::make('Download Pdf')
-                        ->icon('heroicon-o-document-arrow-down')
-                        ->url(fn(Order $record) => route('order.pdf.download', $record))
-                        ->openUrlInNewTab()
                 ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    BulkAction::make('export')
+                    ->icon('heroicon-o-document-arrow-down')
+                    ->action(function (Collection $records) {
+                        // Coleta os IDs dos registros selecionados
+                        $orderIds = $records->pluck('id')->toArray();
+                        return redirect()->route('order.pdf.download', ['ids' => $orderIds]);
+                    }),
                 ]),
             ])
             ->poll('25s')
