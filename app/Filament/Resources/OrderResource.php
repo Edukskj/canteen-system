@@ -50,6 +50,8 @@ class OrderResource extends Resource
     protected static ?string $modelLabel = 'Pedidos';
 
     protected static ?int $navigationSort = 1;
+
+    protected static ?string $recordTitleAttribute = 'id';
     
     public static function form(Form $form): Form
     {
@@ -464,8 +466,9 @@ class OrderResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                     BulkAction::make('export')
-                    ->icon('heroicon-o-document-arrow-down')
-                    ->action(function (Collection $records) {
+                    -> label('Exportar PDF')
+                    -> icon('heroicon-o-document-arrow-down')
+                    -> action(function (Collection $records) {
                         // Coleta os IDs dos registros selecionados
                         $orderIds = $records->pluck('id')->toArray();
                         return redirect()->route('order.pdf.download', ['ids' => $orderIds]);
