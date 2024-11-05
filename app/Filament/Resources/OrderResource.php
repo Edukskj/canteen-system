@@ -198,9 +198,46 @@ class OrderResource extends Resource
 
                 Section::make('Informações do Pedido')->schema([
                     Forms\Components\Grid::make(12) ->schema([
+                        Textarea::make('notes')
+                            ->columnSpan(['md' => 5])
+                            ->label('Notas'),
+
+                        Hidden::make('grand_total')
+                            ->default(0)
+                            ->afterStateUpdated(function ($state, callable $set, $get) {
+                                // Quando o grand_total é atualizado, verifica o status
+                                if ($get('status') === 'E') {
+                                    $set('amount_paid', $state); // Atualiza amount_paid com o valor do grand_total
+                                }
+                            }),
+
+                        ToggleButtons::make('status')
+                            ->label('Status')
+                            ->inline()
+                            ->columnSpan(['md' => 3])
+                            ->default('P')
+                            ->options([
+                                'P' => 'Pendente',
+                                'E' => 'Pago',
+                            ])
+                            ->colors([
+                                'P' => 'info',
+                                'E' => 'success',
+                            ])
+                            -> icons([
+                                'P' => 'heroicon-m-currency-dollar',
+                                'E' => 'heroicon-m-check-badge',
+                            ])
+                            ->afterStateUpdated(function ($state, callable $set, $get) {
+                                // Se o status é alterado para 'E', atualiza amount_paid com o valor de grand_total
+                                if ($state === 'E') {
+                                    $set('amount_paid', $get('grand_total'));
+                                }
+                            }),
+
                         ToggleButtons::make('delivery')
                             ->label('Entrega')
-                            ->columnSpan(['md' => 5])
+                            ->columnSpan(['md' => 4])
                             ->default('N')
                             ->inline()
                             ->options([
@@ -220,49 +257,11 @@ class OrderResource extends Resource
                             ])
                             ->visible(fn (callable $get) => $get('showAdditionalFields') === true),
 
-                        ToggleButtons::make('status')
-                            ->label('Status')
-                            ->inline()
-                            ->columnSpan(['md' => 4])
-                            ->default('P')
-                            ->options([
-                                'P' => 'Pendente',
-                                'I' => 'Impresso',
-                                'E' => 'Pago',
-                            ])
-                            ->colors([
-                                'P' => 'info',
-                                'I' => 'warning',
-                                'E' => 'success',
-                            ])
-                            -> icons([
-                                'P' => 'heroicon-m-currency-dollar',
-                                'I' => 'heroicon-m-newspaper',
-                                'E' => 'heroicon-m-check-badge',
-                            ]),
-
-                        Select::make('payment_method_id')
-                            -> label('Método de Pagamento')
-                            -> columnSpan(['md' => 3])
-                            -> required()
-                            -> searchable()
-                            -> preload()
-                            -> relationship('payment_method','name')
-                            -> default(1)
-                            -> createOptionForm([
-                                TextInput::make('name')
-                                    -> required()
-                                    -> maxLength(255),
-
-                                Forms\Components\Toggle::make('active')
-                                    -> required()
-                                    -> default(true),
-                                ])
                     ]),
-
-                    Textarea::make('notes')
-                        ->label('Notas')
                 ]),
+
+                Hidden::make('amount_paid')
+                ->default(0),
 
                 Section::make('Itens do Pedido')->schema([
                     Repeater::make('items')
@@ -330,8 +329,6 @@ class OrderResource extends Resource
                             return Number::currency($total, 'BRL');
                         }),
 
-                        Hidden::make('grand_total')
-                        ->default(0)
                 ])
                 ])->columnSpanFull()
             ]);
@@ -344,7 +341,8 @@ class OrderResource extends Resource
                 TextColumn::make('id')
                     -> label('ID')
                     -> sortable()
-                    -> searchable(),
+                    -> searchable()
+                    -> visibleFrom('md'),
 
                 TextColumn::make('student.name')
                     -> label('Cliente')

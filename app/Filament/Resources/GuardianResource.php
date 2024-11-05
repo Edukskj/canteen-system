@@ -115,7 +115,7 @@ class GuardianResource extends Resource
                     -> label('Celular')
                     -> searchable() 
                     -> sortable()
-                    ->visibleFrom('md'),
+                    -> visibleFrom('md'),
 
                 Tables\Columns\TextColumn::make('wallet')
                     -> badge()

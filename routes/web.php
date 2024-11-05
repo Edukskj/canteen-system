@@ -8,7 +8,7 @@ Route::get('/', function () {
     return view('index');
 });
 
-Route::get('/index-en', function () {
+Route::get('/en', function () {
     return view('english');
 });
 

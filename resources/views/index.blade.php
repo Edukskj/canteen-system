@@ -57,7 +57,7 @@
             <li><a href="#services">Princípios</a></li>
             <li><a href="#team">Equipe</a></li>
             <li><a href="#contact">Contato</a></li>
-            <a href="/index-en" class="logo d-flex align-items-center">
+            <a href="/en" class="logo d-flex align-items-center">
               <!-- Uncomment the line below if you also wish to use an image logo -->
               <img src="img/brazil.png" alt="">
             </a>
@@ -114,7 +114,6 @@
 
               <div class="position-relative mt-4">
                 <img src="img/about-2.jpg" class="img-fluid rounded-4" alt="">
-                <a href="https://www.youtube.com/watch?v=Y7f98aduVJ8" class="glightbox pulsating-play-btn"></a>
               </div>
             </div>
           </div>
@@ -287,36 +286,6 @@
           </div><!-- End Info Item -->
 
         </div>
-
-        <form action="contact.php" method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="400">
-          <div class="row gy-4">
-
-            <div class="col-md-6">
-              <input type="text" name="name" class="form-control" placeholder="Seu Nome" required="">
-            </div>
-
-            <div class="col-md-6 ">
-              <input type="email" class="form-control" name="email" placeholder="Seu email" required="">
-            </div>
-
-            <div class="col-md-12">
-              <input type="text" class="form-control" name="subject" placeholder="Assunto" required="">
-            </div>
-
-            <div class="col-md-12">
-              <textarea class="form-control" name="message" rows="6" placeholder="Mensagem" required=""></textarea>
-            </div>
-
-            <div class="col-md-12 text-center">
-              <div class="loading">Carregando...</div>
-              <div class="error-message"></div>
-              <div class="sent-message">Sua mensagem foi enviada! Obrigado!</div>
-
-              <button type="submit">Enviar Mensagem</button>
-            </div>
-
-          </div>
-        </form><!-- End Contact Form -->
 
       </div>
 

@@ -20,7 +20,7 @@ class ListUsers extends ListRecords
         return [
             Action::make('importUsers')
             -> label('Importar')
-            -> color('danger')
+            -> color('info')
             -> modal('importUsers')
             -> icon('heroicon-o-document-arrow-down')
             -> form([

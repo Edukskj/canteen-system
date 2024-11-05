@@ -17,6 +17,11 @@ use Filament\Tables;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Table;
 use Filament\Forms\Components\Actions\Action;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\QueryBuilder;
+use Filament\Tables\Filters\QueryBuilder\Constraints\DateConstraint;
+use Filament\Tables\Filters\QueryBuilder\Constraints\NumberConstraint;
+use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -129,6 +134,19 @@ class ProductResource extends Resource
                     -> money('BRL')    
                     -> searchable(),
 
+                TextColumn::make('created_at')
+                    -> label('Criado em')
+                    -> sortable()
+                    -> date('d/m/Y H:i')
+                    -> visibleFrom('md'),
+
+                TextColumn::make('updated_at')
+                    -> label('Atualizado há')
+                    -> dateTime()
+                    -> sortable()
+                    -> since()
+                    -> toggleable(isToggledHiddenByDefault: true),
+
                 Tables\Columns\IconColumn::make('active')
                     -> label('Ativo')    
                     -> boolean()
@@ -136,8 +154,20 @@ class ProductResource extends Resource
 
             ])
             ->filters([
-                //
-            ])
+                    QueryBuilder::make()
+                        ->constraints([
+                            TextConstraint::make('student.name')
+                                ->label('Nome'),
+    
+                            NumberConstraint::make('grand_total')
+                                ->icon('heroicon-m-currency-dollar')
+                                ->label('Valor Total'),
+                                
+                            DateConstraint::make('created_at')
+                                ->label('Criado em'),
+                        ])
+                        ->constraintPickerColumns(2),
+                ], layout: Tables\Enums\FiltersLayout::AboveContentCollapsible)
             ->actions([
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\ViewAction::make(),

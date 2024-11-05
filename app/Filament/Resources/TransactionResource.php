@@ -24,6 +24,10 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\TransactionsExport;
 use Filament\Forms\Get;
 use App\Models\Student;
+use Filament\Tables\Filters\QueryBuilder;
+use Filament\Tables\Filters\QueryBuilder\Constraints\DateConstraint;
+use Filament\Tables\Filters\QueryBuilder\Constraints\NumberConstraint;
+use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Support\Enums\IconPosition;
 
 class TransactionResource extends Resource
@@ -221,7 +225,8 @@ class TransactionResource extends Resource
                 TextColumn::make('student.name')
                     -> label('Aluno')
                     -> sortable()
-                    -> searchable(),
+                    -> searchable()
+                    -> visibleFrom('md'),
 
                 TextColumn::make('value')
                     -> badge()
@@ -244,7 +249,8 @@ class TransactionResource extends Resource
                 TextColumn::make('created_at')
                     -> label('Criado em')
                     -> sortable()
-                    -> date('d/m/Y H:i'),
+                    -> date('d/m/Y H:i')
+                    -> visibleFrom('md'),
 
                 TextColumn::make('updated_at')
                     -> label('Atualizado em')
@@ -254,11 +260,21 @@ class TransactionResource extends Resource
                     -> toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
-            ])
-            ->actions([
-                Tables\Actions\ViewAction::make(),
-            ])
+                QueryBuilder::make()
+                    ->constraints([
+                        TextConstraint::make('student.name')
+                            ->label('Nome'),
+
+                        NumberConstraint::make('grand_total')
+                            ->icon('heroicon-m-currency-dollar')
+                            ->label('Valor Total'),
+                            
+                        DateConstraint::make('created_at')
+                            ->label('Criado em'),
+                    ])
+                    ->constraintPickerColumns(2),
+            ], layout: Tables\Enums\FiltersLayout::AboveContentCollapsible)
+            ->actions([])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     BulkAction::make('export')

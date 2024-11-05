@@ -94,7 +94,8 @@ class UserResource extends Resource
                 Tables\Columns\TextColumn::make('email') 
                     -> label('E-mail')
                     -> searchable() 
-                    -> sortable(),
+                    -> sortable()
+                    -> visibleFrom('md'),
 
                 Tables\Columns\TextColumn::make('roles.name') 
                     -> label('Cargo')
