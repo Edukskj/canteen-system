@@ -53,7 +53,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->navigationGroups([
                 'Vendas',
-                'Movimentações',
+                'Pagamentos',
                 'Clientes',
                 'Admin',
             ])

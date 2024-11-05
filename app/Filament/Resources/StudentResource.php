@@ -29,6 +29,8 @@ class StudentResource extends Resource
 
     protected static ?string $modelLabel = 'Alunos';
 
+    protected static ?string $recordTitleAttribute = 'name';
+
     public static function form(Form $form): Form
     {
         return $form

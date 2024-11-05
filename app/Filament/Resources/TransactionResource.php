@@ -32,7 +32,7 @@ class TransactionResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-banknotes';
     protected static ?string $activeNavigationIcon = 'heroicon-s-banknotes';
 
-    protected static ?string $navigationGroup = 'Movimentações';
+    protected static ?string $navigationGroup = 'Pagamentos';
 
     protected static ?string $modelLabel = 'Movimentações';
 

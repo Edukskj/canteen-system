@@ -29,6 +29,11 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\Actions\Action as FormAction;
 use Filament\Actions\Action;
 use Filament\Forms\Components\ToggleButtons;
+use Filament\Tables\Filters\QueryBuilder;
+use Filament\Tables\Enums\FiltersLayout;
+use Filament\Tables\Filters\QueryBuilder\Constraints\DateConstraint;
+use Filament\Tables\Filters\QueryBuilder\Constraints\NumberConstraint;
+use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 
 class OrderResource extends Resource
 {
@@ -42,7 +47,7 @@ class OrderResource extends Resource
     protected static ?string $modelLabel = 'Pedidos';
 
     protected static ?int $navigationSort = 1;
-
+    
     public static function form(Form $form): Form
     {
         return $form
@@ -424,8 +429,22 @@ class OrderResource extends Resource
                     -> toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
-            ])
+                QueryBuilder::make()
+                    ->constraints([
+                        TextConstraint::make('student.name')
+                            ->label('Nome'),
+
+                        NumberConstraint::make('grand_total')
+                            ->icon('heroicon-m-currency-dollar')
+                            ->label('Valor Total'),
+                            
+                        DateConstraint::make('created_at')
+                            ->label('Criado em'),
+                    ])
+                    ->constraintPickerColumns(2),
+            ], layout: Tables\Enums\FiltersLayout::AboveContentCollapsible)
+            
+            ->deferFilters()
             ->actions([
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\ViewAction::make(),

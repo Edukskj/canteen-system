@@ -23,7 +23,7 @@ class PaymentMethodResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-tag';
     protected static ?string $activeNavigationIcon = 'heroicon-s-tag';
 
-    protected static ?string $navigationGroup = 'Movimentações';
+    protected static ?string $navigationGroup = 'Pagamentos';
 
     protected static ?string $modelLabel = 'Forma de Pagamento';
     protected static ?string $pluralModelLabel = 'Formas de Pagamento';

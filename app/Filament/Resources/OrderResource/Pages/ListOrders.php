@@ -29,7 +29,9 @@ class ListOrders extends ListRecords
     public function getTabs(): array {
         return [
             null => Tab::make('Todos'),
-            'Entregar' => Tab::make()->query(fn ($query) => $query->where('delivery','E'))
+            'À Entregar' => Tab::make()->query(fn ($query) => $query->where('delivery', 'E')->where('status', '!=', 'E')),
+            'Pendentes' => Tab::make()->query(fn ($query) => $query->where('status', 'P')),
+            'Pagos' => Tab::make()->query(fn ($query) => $query->where('status', 'E'))
         ];
     }
 }
